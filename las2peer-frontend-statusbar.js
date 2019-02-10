@@ -432,9 +432,9 @@ class Las2peerFrontendStatusbar extends PolymerElement {
           clientid$="[[oidcClientId]]"
           authority$="[[oidcAuthority]]"
           providername="Layers"
-          popupredirecturi$="[[baseUrl]]"
-          popuppostlogoutredirecturi$="[[baseUrl]]"
-          silentredirecturi$="[[baseUrl]]"
+          popupredirecturi$="[[oidcReturnUrl]]"
+          popuppostlogoutredirecturi$="[[oidcReturnUrl]]"
+          silentredirecturi$="[[oidcReturnUrl]]"
         ></openidconnect-signin>
         <openidconnect-popup-signin-callback></openidconnect-popup-signin-callback>
         <openidconnect-popup-signout-callback></openidconnect-popup-signout-callback>
@@ -677,7 +677,11 @@ class Las2peerFrontendStatusbar extends PolymerElement {
         return {
             baseUrl: {
                 type: String,
-                value: '127.0.0.1:8080',
+                value: 'http://127.0.0.1:8080',
+            },
+            oidcReturnUrl: {
+                type: String,
+                value: null
             },
             hover: {
                 type: Boolean,
@@ -777,7 +781,7 @@ class Las2peerFrontendStatusbar extends PolymerElement {
             },
             _requestHeaders: {
                 type: Object,
-                computed: '_computeHeaders(loginName,loginPassword,loginOidcToken,loginOidcProvider)'
+                value: []
             },
             sendCookie: {
                 type: Boolean,
@@ -798,15 +802,15 @@ class Las2peerFrontendStatusbar extends PolymerElement {
         }
     }
 
-    _computeHeaders(loginName, loginPassword, loginOidcToken, loginOidcProvider) {
+    _computeHeaders() {
         var headers = {};
 
-        if (loginName != null && loginPassword != null) {
-            headers["Authorization"] = "Basic " + btoa(loginName + ":" + loginPassword);
-        } else if (loginOidcToken != null) {
-            headers["access_token"] = loginOidcToken;
-            if (loginOidcProvider != null) {
-                headers["oidc_provider"] = loginOidcProvider;
+        if (this.loginName != null && this.loginPassword != null) {
+            headers["Authorization"] = "Basic " + btoa(this.loginName + ":" + this.loginPassword);
+        } else if (this.loginOidcToken != null) {
+            headers["access_token"] = this.loginOidcToken;
+            if (this.loginOidcProvider != null) {
+                headers["oidc_provider"] = this.loginOidcProvider;
             }
         }
         return headers;
@@ -922,6 +926,9 @@ class Las2peerFrontendStatusbar extends PolymerElement {
     ready() {
         super.ready();
         this.loggedIn = this._computeLogin();
+        if (!this.oidcReturnUrl)
+            this.oidcReturnUrl = this.baseUrl;
+        this.requestHeaders = this._computeHeaders();
         let appThis = this;
         this.$.oidcButton.addEventListener('signed-out', e => appThis._oidcUser = null);
         this.$.oidcButton.addEventListener('signed-in', function(event) { appThis.handleLogin(event.detail); });
@@ -1222,7 +1229,12 @@ class Las2peerFrontendStatusbar extends PolymerElement {
         console.log("[DEBUG] OIDC user obj:", userObject);
         if (userObject.token_type !== "Bearer") throw "unexpected OIDC token type, fix me";
         this._oidcUser = userObject;
-        this.loggedIn = (!!(this._oidcUser));
+        if (typeof userObject == "undefined")
+            return;
+        this.loginOidcToken = this._oidcUser.access_token;
+        this.loginOidcProvider = this.oidcAuthority;
+        this.loggedIn = this._computeLogin();
+        this.requestHeaders = this._computeHeaders();
         this.$.ajaxUserinformation.generateRequest();
         this.$.ajaxGetContacts.generateRequest();
         this.$.ajaxGetGroups.generateRequest();
