@@ -25,6 +25,6 @@
         "@polymer/paper-dialog": "^3.0.1",
         "@polymer/paper-toast": "^3.0.1",
         "@polymer/paper-dialog-scrollable": "^3.0.1",
-        "openidconnect-signin": "github:rwth-acis/openidconnect-signin#f158f7f",
+        "openidconnect-signin": "github:rwth-acis/openidconnect-signin#f158f7f"
     }
 }
