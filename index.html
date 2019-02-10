@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+        <title>las2peer-frontend-statusbar demo</title>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <!-- import Bootstrap for responsive UI (must) -->
+        <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
+        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script type="module" src="las2peer-frontend-statusbar.js"></script>
+
+        <style is="custom-style" include="demo-pages-shared-styles"></style>
+    </head>
+    <body>
+        <noscript>
+            Please enable JavaScript to view this website.
+        </noscript>
+        <div class="vertical-section-container centered">
+            <h3>Basic las2peer-frontend-statusbar demo</h3>
+            <div style="margin:15px;width:150px;">
+                <div style="float:right">
+                    <p>
+                      User
+                    </p>
+                    <las2peer-frontend-statusbar base-url="http://localhost:8081" oidc-client-id="e4080a03-1839-49d4-92e7-d50fab990576"></las2peer-frontend-statusbar>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
