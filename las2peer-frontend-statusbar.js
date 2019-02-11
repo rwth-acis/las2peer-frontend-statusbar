@@ -761,7 +761,7 @@ class Las2peerFrontendStatusbar extends PolymerElement {
             },
             loggedIn: {
                 type: Boolean,
-                computed: false
+                computed: '_computeLogin(loginName,loginPassword,loginOidcToken,loginOidcProvider)'
             },
             loginName: {
                 type: String,
@@ -781,7 +781,7 @@ class Las2peerFrontendStatusbar extends PolymerElement {
             },
             _requestHeaders: {
                 type: Object,
-                value: []
+                computed: "_computeHeaders(loginName,loginPassword,loginOidcToken,loginOidcProvider)"
             },
             sendCookie: {
                 type: Boolean,
@@ -802,15 +802,15 @@ class Las2peerFrontendStatusbar extends PolymerElement {
         }
     }
 
-    _computeHeaders() {
+    _computeHeaders(loginName,loginPassword,loginOidcToken,loginOidcProvider) {
         var headers = {};
 
-        if (this.loginName != null && this.loginPassword != null) {
-            headers["Authorization"] = "Basic " + btoa(this.loginName + ":" + this.loginPassword);
-        } else if (this.loginOidcToken != null) {
-            headers["access_token"] = this.loginOidcToken;
-            if (this.loginOidcProvider != null) {
-                headers["oidc_provider"] = this.loginOidcProvider;
+        if (loginName != null && loginPassword != null) {
+            headers["Authorization"] = "Basic " + btoa(loginName + ":" + loginPassword);
+        } else if (loginOidcToken != null) {
+            headers["access_token"] = loginOidcToken;
+            if (loginOidcProvider != null) {
+                headers["oidc_provider"] = loginOidcProvider;
             }
         }
         return headers;
@@ -910,13 +910,13 @@ class Las2peerFrontendStatusbar extends PolymerElement {
         }
     }
 
-    _computeLogin() {
-        if (this.loginName != null) {
+    _computeLogin(loginName,loginPassword,loginOidcToken,loginOidcProvider) {
+        if (loginName != null) {
             return true;
-        } else if (this.oginOidcToken != null && this.loginOidcProvider != null && this.loginOidcToken != "undefined") {
+        } else if (loginOidcToken != null && loginOidcProvider != null && loginOidcToken != "undefined") {
             return true;
         } else
-        return (!!(this._oidcUser));
+        return false;
     }
 
     _computeName(){
@@ -925,10 +925,8 @@ class Las2peerFrontendStatusbar extends PolymerElement {
 
     ready() {
         super.ready();
-        this.loggedIn = this._computeLogin();
         if (!this.oidcReturnUrl)
             this.oidcReturnUrl = this.baseUrl;
-        this.requestHeaders = this._computeHeaders();
         let appThis = this;
         this.$.oidcButton.addEventListener('signed-out', e => appThis._oidcUser = null);
         this.$.oidcButton.addEventListener('signed-in', function(event) { appThis.handleLogin(event.detail); });
@@ -1233,8 +1231,6 @@ class Las2peerFrontendStatusbar extends PolymerElement {
             return;
         this.loginOidcToken = this._oidcUser.access_token;
         this.loginOidcProvider = this.oidcAuthority;
-        this.loggedIn = this._computeLogin();
-        this.requestHeaders = this._computeHeaders();
         this.$.ajaxUserinformation.generateRequest();
         this.$.ajaxGetContacts.generateRequest();
         this.$.ajaxGetGroups.generateRequest();
