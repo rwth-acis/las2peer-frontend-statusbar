@@ -14,10 +14,22 @@ render() {
             :host {
                 display: block;
             }
+            #statusbar-container{
+                display:inline-block;
+                width:100%;
+                white-space: nowrap;
+            }
             #widget-container {
-                padding: 5px 10px 0px 5px;
+                margin-right:25px;
+                margin-top: 25px;
                 float: right;
                 cursor: default;
+            }
+            .inline{
+                display:inline-block;
+            }
+            h1{
+                margin-left: 25px;
             }
             h3 {
                 margin-left: 60px;
@@ -25,8 +37,8 @@ render() {
             }
         </style>
         <paper-card id="statusbar-container">
-            <h1 id="service-title">${this.service}</h1>
-            <div id="widget-container" @click=${this.handleClick}>
+            <h1 class="inline" id="service-title">${this.service}</h1>
+            <div class="inline" id="widget-container" @click=${this.handleClick}>
                 <las2peer-user-widget id="widget"></las2peer-user-widget>
                 <h3>Login</h3>
             </div>
