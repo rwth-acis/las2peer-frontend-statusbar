@@ -50,14 +50,10 @@ render() {
           clientid="${this.oidcClientId}"
           authority="${this.oidcAuthority}"
           providername="Layers"
-          popupredirecturi="${this.oidcReturnUrl}"
-          popuppostlogoutredirecturi="${this.oidcReturnUrl}"
-          silentredirecturi="${this.oidcReturnUrl}"
+          popupredirecturi="${this._getOidcSigninCallback()}"
+          popuppostlogoutredirecturi="${this._getOidcSignoutCallback()}"
+          silentredirecturi="${this._getOidcSilentCallback()}"
         ></openidconnect-signin>
-
-                                        <openidconnect-popup-signin-callback></openidconnect-popup-signin-callback>
-                                        <openidconnect-popup-signout-callback></openidconnect-popup-signout-callback>
-                                        <openidconnect-signin-silent-callback></openidconnect-signin-silent-callback>
         `;
     }
 
@@ -113,7 +109,7 @@ render() {
     }
 
     handleClick(e) {
-        console.log("click");
+        console.log("click",e.target);
         if (!this.loggedIn)
             this.shadowRoot.querySelector("#oidcButton")._handleClick();
     }
@@ -169,12 +165,11 @@ render() {
         this.loginOidcToken = "";
         this.loginOidcProvider = "";
         this._oidcUser = null;
-        this.oidcSigninCallback = this.oidcReturnUrl + "popup-signin-callback.html";
-        this.oidcSignoutCallback = this.oidcReturnUrl + "popup-signout-callback.html";
-        this.oidcSilentCallback = this.oidcReturnUrl + "silent-callback.html";
     }
 
     _getUsername() {
+        if (!this.loggedIn)
+            return "Login";
         if (!!this.loginName)
             return this.loginName;
         let widget = this.shadowRoot.querySelector("#widget");
@@ -187,7 +182,19 @@ render() {
         }
         if (!!this._oidcUser)
             return this._oidcUser.profile.preferred_username;
-        return "Login";
+        return "Unknown Username";
+    }
+
+    _getOidcSigninCallback() {
+        return this.oidcReturnUrl + "/popup-signin-callback.html";
+    }
+
+    _getOidcSignoutCallback() {
+        return this.oidcReturnUrl + "/popup-signout-callback.html";
+    }
+
+    _getOidcSilentCallback() {
+        return this.oidcReturnUrl + "/silent-callback.html";
     }
 }
 
