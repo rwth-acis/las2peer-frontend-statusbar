@@ -5,7 +5,7 @@
     "main": "las2peer-frontend-statusbar.js",
     "dependencies": {
         "@polymer/lit-element": "^0.6.3",
-        "openidconnect-signin": "github:rwth-acis/openidconnect-signin#f158f7f",
+        "openidconnect-signin": "github:rwth-acis/openidconnect-signin",
         "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget"
     }
 }

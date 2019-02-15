@@ -94,6 +94,9 @@ render() {
             },
             oidcAuthority: {
                 type: String
+            },
+            displayWidth: {
+                type: String
             }
         }
     }
@@ -109,7 +112,6 @@ render() {
     }
 
     handleClick(e) {
-        console.log("click",e.target);
         if (!this.loggedIn)
             this.shadowRoot.querySelector("#oidcButton")._handleClick();
     }
@@ -123,7 +125,6 @@ render() {
         if (!userObject) {
             this.shadowRoot.querySelector("#username").innerHTML = this._getUsername();
         } else {
-            console.log("[DEBUG] OIDC user obj:", userObject);
             if (userObject.token_type !== "Bearer") throw "unexpected OIDC token type, fix me";
             this._oidcUser = userObject;
             this.loginOidcToken = this._oidcUser.access_token;
@@ -165,6 +166,7 @@ render() {
         this.loginOidcToken = "";
         this.loginOidcProvider = "";
         this._oidcUser = null;
+        this.displayWidth = "100%";
     }
 
     _getUsername() {
