@@ -18,7 +18,7 @@ render() {
             }
             #statusbar-container{
                 display:inline-block;
-                width:100%;
+                width:${this.displayWidth};
                 white-space: nowrap;
             }
             #widget-container {
