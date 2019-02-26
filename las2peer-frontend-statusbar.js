@@ -19,7 +19,6 @@ render() {
             #statusbar-container{
                 display:inline-block;
                 width:${this.displayWidth};
-                white-space: nowrap;
             }
             #widget-container {
                 margin-right:25px;
@@ -109,6 +108,7 @@ render() {
         this.baseUrl = "http://127.0.0.1:8080";
         this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
         this.oidcReturnUrl = this.baseUrl + "/callbacks";
+        this.displayWidth = "100%";
     }
 
     handleClick(e) {
@@ -166,7 +166,6 @@ render() {
         this.loginOidcToken = "";
         this.loginOidcProvider = "";
         this._oidcUser = null;
-        this.displayWidth = "100%";
     }
 
     _getUsername() {
