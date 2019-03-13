@@ -13,9 +13,14 @@ class Las2peerFrontendStatusbar extends LitElement {
 render() {
       return html`
         <style>
-            :host {
+            :host([background]) {
+                background: var(--statusbar-background, #4285f4);
                 display: block;
             }
+            paper-card {
+              --paper-card-background-color: var(--statusbar-background, #4285f4);
+            }
+
             #statusbar-container{
                 display:inline-block;
                 width:${this.displayWidth};
@@ -49,9 +54,9 @@ render() {
           clientid="${this.oidcClientId}"
           authority="${this.oidcAuthority}"
           providername="Layers"
-          popupredirecturi="${this._getOidcSigninCallback()}"
-          popuppostlogoutredirecturi="${this._getOidcSignoutCallback()}"
-          silentredirecturi="${this._getOidcSilentCallback()}"
+          popupredirecturi="${this.oidcPopupSigninUrl}"
+          popuppostlogoutredirecturi="${this.oidcPopupSignoutUrl}"
+          silentredirecturi="${this.oidcSilentSigninUrl}"
         ></openidconnect-signin>
         `;
     }
@@ -64,7 +69,13 @@ render() {
             baseUrl: {
                 type: String
             },
-            oidcReturnUrl: {
+            oidcPopupSigninUrl: {
+                type: String
+            },
+            oidcPopupSignoutUrl: {
+                type: String
+            },
+            oidcSilentSigninUrl: {
                 type: String
             },
             loggedIn: {
@@ -85,6 +96,9 @@ render() {
             sendCookie: {
                 type: Boolean
             },
+            autoAppendWidget: {
+                type: Boolean
+            },
             _oidcUser: {
                 type: Object
             },
@@ -103,12 +117,14 @@ render() {
     constructor() {
         super();
         this._initialize();
-        this.sendCookie = false;
+        this.autoAppendWidget = false;
         this.service = "Unnamed Service";
         this.baseUrl = "http://127.0.0.1:8080";
         this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
-        this.oidcReturnUrl = this.baseUrl + "/callbacks";
         this.displayWidth = "100%";
+        this.oidcPopupSigninUrl = this.baseUrl + "/callbacks/popup-signin-callback.html";
+        this.oidcPopupSignoutUrl = this.baseUrl + "/callbacks/popup-signout-callback.html";
+        this.oidcSilentSigninUrl = this.baseUrl + "/callbacks/silent-callback.html";
     }
 
     handleClick(e) {
@@ -119,9 +135,10 @@ render() {
     handleLogin(event) {
         if (this.loggedIn)
             return;
+        let userObject = event.detail;
+        this.dispatchEvent(new CustomEvent('signed-in', {detail: userObject, bubbles: true}));
         this.loggedIn = true;
         this.shadowRoot.querySelector("#widget-container").style = "cursor:auto";
-        let userObject = event.detail;
         if (!userObject) {
             this.shadowRoot.querySelector("#username").innerHTML = this._getUsername();
         } else {
@@ -129,21 +146,24 @@ render() {
             this._oidcUser = userObject;
             this.loginOidcToken = this._oidcUser.access_token;
             this.loginOidcProvider = this.oidcAuthority;
-            this._appendWidget();
+            if (this.autoAppendWidget)
+                this._appendWidget();
         }
     }
 
     handleLogout() {
+        this.dispatchEvent(new CustomEvent('signed-out'));
         if (!this.loggedIn)
             return;
         console.log("logged out ", this._getUsername());
         this._initialize();
-        this._appendWidget();
+        if (this.autoAppendWidget)
+            this._appendWidget();
         this.shadowRoot.querySelector("#widget-container").style = "cursor:default";
     }
 
     _appendWidget() {
-        let widgetHTML = "<las2peer-user-widget id='widget' baseUrl=" + this.baseUrl;
+        let widgetHTML = "<las2peer-user-widget id='widget' base-url=" + this.baseUrl;
         if (!!this.loginName)
             widgetHTML += " login-name=" + this.loginName;
         if (!!this.loginPassword)
@@ -153,7 +173,7 @@ render() {
         if (!!this.loginOidcProvider)
             widgetHTML += " login-oidc-provider=" + this.loginOidcProvider;
         if (!!this.sendCookie)
-            widgetAttributes += " send-cookie=true";
+            widgetHTML += " send-cookie=true";
         widgetHTML += "></las2peer-user-widget>";
         let headerHTML = "<h3>" + this._getUsername() + "</h3>";
         this.shadowRoot.querySelector("#widget-container").innerHTML = widgetHTML + headerHTML;
@@ -166,6 +186,7 @@ render() {
         this.loginOidcToken = "";
         this.loginOidcProvider = "";
         this._oidcUser = null;
+        this.sendCookie = false;
     }
 
     _getUsername() {
@@ -184,18 +205,6 @@ render() {
         if (!!this._oidcUser)
             return this._oidcUser.profile.preferred_username;
         return "Unknown Username";
-    }
-
-    _getOidcSigninCallback() {
-        return this.oidcReturnUrl + "/popup-signin-callback.html";
-    }
-
-    _getOidcSignoutCallback() {
-        return this.oidcReturnUrl + "/popup-signout-callback.html";
-    }
-
-    _getOidcSilentCallback() {
-        return this.oidcReturnUrl + "/silent-callback.html";
     }
 }
 
