@@ -7,9 +7,7 @@ import 'las2peer-frontend-user-widget/las2peer-user-widget.js';
 import '@polymer/paper-card/paper-card.js';
 
 class Las2peerFrontendStatusbar extends LitElement {
-/*
-  TODO: fix oidc login redirect
-        */
+
 render() {
       return html`
         <style>
@@ -160,6 +158,11 @@ render() {
         if (this.autoAppendWidget)
             this._appendWidget();
         this.shadowRoot.querySelector("#widget-container").style = "cursor:default";
+        let i = document.createElement('iframe');
+        i.style.display = 'none';
+        i.onload = function() { i.parentNode.removeChild(i); };
+        i.src = 'https://api.learning-layers.eu/o/oauth2/logout';
+        document.body.appendChild(i);
     }
 
     _appendWidget() {
@@ -168,8 +171,11 @@ render() {
             widgetHTML += " login-name=" + this.loginName;
         if (!!this.loginPassword)
             widgetHTML += " login-password=" + this.loginPassword;
-        if (!!this.loginOidcToken)
+        if (!!this.loginOidcToken) {
             widgetHTML += " login-oidc-token=" + this.loginOidcToken;
+            if (!this.loginName && !!this._oidcUser)
+                widgetHTML += " login-name=" + this._oidcUser.profile.preferred_username;
+        }
         if (!!this.loginOidcProvider)
             widgetHTML += " login-oidc-provider=" + this.loginOidcProvider;
         if (!!this.sendCookie)
