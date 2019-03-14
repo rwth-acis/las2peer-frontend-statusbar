@@ -12,11 +12,11 @@ render() {
       return html`
         <style>
             :host([background]) {
-                background: var(--statusbar-background, #4285f4);
+                background: var(--statusbar-background, #fff);
                 display: block;
             }
             paper-card {
-              --paper-card-background-color: var(--statusbar-background, #4285f4);
+              --paper-card-background-color: var(--statusbar-background, #fff);
             }
 
             #statusbar-container{
@@ -43,7 +43,11 @@ render() {
         <paper-card id="statusbar-container">
             <h1 class="inline" id="service-title">${this.service}</h1>
             <div class="inline" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
-                <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword} login-oidc-token=${this.loginOidcToken} login-oidc-provider=${this.loginOidcProvider}></las2peer-user-widget>
+                <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
+                    login-oidc-token=${this.loginOidcToken}
+                    login-oidc-provider=${this.loginOidcProvider}
+                    login-oidc-sub=${this.loginOidcSub}
+                ></las2peer-user-widget>
                 <h3 id="username">Login</h3>
             </div>
         </paper-card>
@@ -89,6 +93,9 @@ render() {
                 type: String
             },
             loginOidcProvider: {
+                type: String
+            },
+            loginOidcSub: {
                 type: String
             },
             sendCookie: {
@@ -144,6 +151,7 @@ render() {
             this._oidcUser = userObject;
             this.loginOidcToken = this._oidcUser.access_token;
             this.loginOidcProvider = this.oidcAuthority;
+            this.loginOidcSub = this._oidcUser.profile.sub;
             if (this.autoAppendWidget)
                 this._appendWidget();
         }
@@ -178,6 +186,8 @@ render() {
         }
         if (!!this.loginOidcProvider)
             widgetHTML += " login-oidc-provider=" + this.loginOidcProvider;
+        if (!!this.loginOidcSub)
+            widgetHTML += " login-oidc-sub=" + this.loginOidcSub;
         if (!!this.sendCookie)
             widgetHTML += " send-cookie=true";
         widgetHTML += "></las2peer-user-widget>";
@@ -191,6 +201,7 @@ render() {
         this.loginPassword = "";
         this.loginOidcToken = "";
         this.loginOidcProvider = "";
+        this.loginOidcSub = "";
         this._oidcUser = null;
         this.sendCookie = false;
     }
