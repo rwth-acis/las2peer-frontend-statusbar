@@ -1,4 +1,4 @@
-import { LitElement, html } from '@polymer/lit-element';
+import {html, LitElement} from '@polymer/lit-element';
 import 'openidconnect-signin/openidconnect-signin.js';
 import 'openidconnect-signin/openidconnect-popup-signin-callback.js';
 import 'openidconnect-signin/openidconnect-popup-signout-callback.js';
@@ -41,7 +41,9 @@ render() {
             }
         </style>
         <paper-card id="statusbar-container">
-            <h1 class="inline" id="service-title">${this.service}</h1>
+            <slot class="inline" name="left"></slot>
+            <slot class="inline" name="title"><h1 class="inline" id="service-title">${this.service}</h1></slot>
+            <slot class="inline" name="middle"></slot>
             <div class="inline" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
                 <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
                     login-oidc-token=${this.loginOidcToken}

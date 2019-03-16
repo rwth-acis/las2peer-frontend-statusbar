@@ -30,3 +30,23 @@ You can create a new openID connect token [here](https://api.learning-layers.eu/
 
 The project includes a demo which can be run locally by running `npm i` and `polymer serve`.
 In order to run the demo you should have version 3.0 of [polymer-cli](https://polymer-library.polymer-project.org/3.0/docs/tools/polymer-cli) installed. Also make sure to access the demo via the following URL `localhost:8081`.
+
+## Slots
+
+The component can be extended or overridden at these slots.
+
+| Slot   | Description                                          |
+|--------|------------------------------------------------------|
+| left   | Insert elements left to the title.                   |
+| title  | Override the title element.                          |
+| middle | Insert elements between title and user login widget. |
+
+## Theming
+
+Set the following CSS variables to change the default appearance.
+
+| CSS Variable                    | Description                                                           | Default          |
+|---------------------------------|-----------------------------------------------------------------------|------------------|
+| --statusbar-background | Set the *background* property of the element. | #fff |
+
+Look [here](https://github.com/rwth-acis/las2peer-frontend-user-widget#theming) for theming the user widget.

@@ -31,5 +31,25 @@
               autoAppendWidget=true
             ></las2peer-frontend-statusbar>
         </div>
+        <div class="vertical-section-container centered">
+            <h3>las2peer-frontend-statusbar demo with slots</h3>
+            <las2peer-frontend-statusbar service="Demo" displaywidth="700px"
+                                         baseurl="https://las2peer.dbis.rwth-aachen.de:9098"
+                                         oidcpopupsigninurl="http://localhost:8081/callbacks/popup-signin-callback.html"
+                                         oidcpopupsignouturl="http://localhost:8081/callbacks/popup-signout-callback.html"
+                                         oidcsilentsigninturl="http://localhost:8081/callbacks/silent-callback.html"
+                                         oidcclientid="2440e436-1132-4e77-abf6-edde90f24a6b"
+                                         autoAppendWidget=true
+            >
+                <button slot="left">Left</button>
+                <h2 slot="title">Overridden Title</h2>
+                <select slot="middle">
+                    <option>middle</option>
+                    <option>------</option>
+                    <option>German</option>
+                    <option>English</option>
+                </select>
+            </las2peer-frontend-statusbar>
+        </div>
     </body>
 </html>
