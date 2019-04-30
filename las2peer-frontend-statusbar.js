@@ -50,7 +50,7 @@ render() {
                     login-oidc-provider=${this.loginOidcProvider}
                     login-oidc-sub=${this.loginOidcSub}
                 ></las2peer-user-widget>
-                <h3 id="username">Login</h3>
+                <h3 id="username">${this._getUsername()}</h3>
             </div>
         </paper-card>
         <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}"
