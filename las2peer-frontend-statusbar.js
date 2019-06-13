@@ -61,6 +61,7 @@ render() {
           popupredirecturi="${this.oidcPopupSigninUrl}"
           popuppostlogoutredirecturi="${this.oidcPopupSignoutUrl}"
           silentredirecturi="${this.oidcSilentSigninUrl}"
+          useRedirect="${this.useRedirect}"
         ></openidconnect-signin>
         `;
     }
@@ -115,6 +116,9 @@ render() {
             oidcAuthority: {
                 type: String
             },
+            useRedirect: {
+                type: Boolean
+            },
             displayWidth: {
                 type: String
             }
@@ -132,6 +136,7 @@ render() {
         this.oidcPopupSigninUrl = this.baseUrl + "/callbacks/popup-signin-callback.html";
         this.oidcPopupSignoutUrl = this.baseUrl + "/callbacks/popup-signout-callback.html";
         this.oidcSilentSigninUrl = this.baseUrl + "/callbacks/silent-callback.html";
+        this.useRedirect = false;
     }
 
     handleClick(e) {
