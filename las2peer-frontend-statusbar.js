@@ -61,7 +61,7 @@ render() {
           popupredirecturi="${this.oidcPopupSigninUrl}"
           popuppostlogoutredirecturi="${this.oidcPopupSignoutUrl}"
           silentredirecturi="${this.oidcSilentSigninUrl}"
-          useRedirect="${this.useRedirect}"
+          ?useRedirect="${this.useRedirect}"
         ></openidconnect-signin>
         `;
     }
