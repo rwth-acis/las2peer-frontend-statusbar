@@ -1,11 +1,11 @@
 {
     "name": "las2peer-frontend-statusbar",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "A polymer widget which uses the las2peer Contact and UserInformation Service as well as the openId connect service",
     "main": "las2peer-frontend-statusbar.js",
     "dependencies": {
         "@polymer/lit-element": "^0.6.3",
         "openidconnect-signin": "github:rwth-acis/openidconnect-signin",
-        "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget#0.1.1"
+        "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget#0.2.0"
     }
 }
