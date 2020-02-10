@@ -24,10 +24,12 @@ render() {
                 width:${this.displayWidth};
             }
             #widget-container {
-                margin-right:25px;
-                margin-top: 25px;
+                padding: 25px 25px 10px 10px;
                 float: right;
-                cursor: default;
+                cursor: pointer;
+            }
+            #widget-container:hover {
+                background: #5691f5;
             }
             .inline{
                 display:inline-block;
