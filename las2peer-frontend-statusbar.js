@@ -123,6 +123,9 @@ render() {
             },
             displayWidth: {
                 type: String
+            },
+            suppressWidgetError: {
+                type: Boolean
             }
         }
     }
@@ -139,6 +142,7 @@ render() {
         this.oidcPopupSignoutUrl = this.baseUrl + "/callbacks/popup-signout-callback.html";
         this.oidcSilentSigninUrl = this.baseUrl + "/callbacks/silent-callback.html";
         this.useRedirect = false;
+        this.suppressWidgetError = false;
     }
 
     handleClick(e) {
@@ -199,6 +203,8 @@ render() {
             widgetHTML += " login-oidc-sub=" + this.loginOidcSub;
         if (!!this.sendCookie)
             widgetHTML += " send-cookie=true";
+        if (!!this.suppressWidgetError)
+            widgetHTML += " suppress-widget-error=true";
         widgetHTML += "></las2peer-user-widget>";
         let headerHTML = "<h3>" + this._getUsername() + "</h3>";
         this.shadowRoot.querySelector("#widget-container").innerHTML = widgetHTML + headerHTML;
