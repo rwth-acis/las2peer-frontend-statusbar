@@ -51,6 +51,7 @@ render() {
                     login-oidc-token=${this.loginOidcToken}
                     login-oidc-provider=${this.loginOidcProvider}
                     login-oidc-sub=${this.loginOidcSub}
+                    suppress-error-toast=${this.suppressWidgetError}
                 ></las2peer-user-widget>
                 <h3 id="username">${this._getUsername()}</h3>
             </div>
