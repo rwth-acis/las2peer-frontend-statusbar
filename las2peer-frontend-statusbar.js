@@ -204,7 +204,7 @@ render() {
         if (!!this.sendCookie)
             widgetHTML += " send-cookie=true";
         if (!!this.suppressWidgetError)
-            widgetHTML += " suppress-widget-error=true";
+            widgetHTML += " suppress-error-toast=true";
         widgetHTML += "></las2peer-user-widget>";
         let headerHTML = "<h3>" + this._getUsername() + "</h3>";
         this.shadowRoot.querySelector("#widget-container").innerHTML = widgetHTML + headerHTML;
@@ -219,6 +219,7 @@ render() {
         this.loginOidcSub = "";
         this._oidcUser = null;
         this.sendCookie = false;
+        this.suppressWidgetError = false;
     }
 
     _getUsername() {
