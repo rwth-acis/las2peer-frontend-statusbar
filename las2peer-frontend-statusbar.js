@@ -139,9 +139,9 @@ render() {
         this.baseUrl = "http://127.0.0.1:8080";
         this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
         this.displayWidth = "100%";
-        this.oidcPopupSigninUrl = this.baseUrl + "/callbacks/popup-signin-callback.html";
-        this.oidcPopupSignoutUrl = this.baseUrl + "/callbacks/popup-signout-callback.html";
-        this.oidcSilentSigninUrl = this.baseUrl + "/callbacks/silent-callback.html";
+        this.oidcPopupSigninUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signin-callback.html";
+        this.oidcPopupSignoutUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signout-callback.html";
+        this.oidcSilentSigninUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/silent-callback.html";
         this.useRedirect = false;
         this.suppressWidgetError = false;
     }
