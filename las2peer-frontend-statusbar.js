@@ -24,8 +24,10 @@ render() {
                 width:${this.displayWidth};
             }
             #widget-container {
+                margin-left: auto;
+                margin-top: 0;
+                margin-bottom: 0;
                 padding: 25px 25px 10px 10px;
-                float: right;
                 cursor: pointer;
             }
             #widget-container:hover {
@@ -33,6 +35,10 @@ render() {
             }
             .inline{
                 display:inline-block;
+            }
+            .center-vertical {
+                margin-top: auto;
+                margin-bottom: auto;
             }
             h1{
                 margin-left: 25px;
@@ -43,16 +49,24 @@ render() {
             }
         </style>
         <paper-card id="statusbar-container">
-            <slot class="inline" name="left"></slot>
-            <slot class="inline" name="title"><h1 class="inline" id="service-title">${this.service}</h1></slot>
-            <slot class="inline" name="middle"></slot>
-            <div class="inline" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
-                <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
-                    login-oidc-token=${this.loginOidcToken}
-                    login-oidc-provider=${this.loginOidcProvider}
-                    login-oidc-sub=${this.loginOidcSub}
-                ></las2peer-user-widget>
-                <h3 id="username">${this._getUsername()}</h3>
+            <div style="display: flex">
+                <slot class="inline center-vertical" name="left"></slot>
+                <slot class="inline" name="title">
+                    <div style="display: flex; flex-flow: column">
+                        <h1 id="service-title">${this.service}</h1>
+                        <h5 style="margin-left: 25px; margin-top: -30px;" id="subtitle">${this.subtitle}</h5>
+                    </div>
+                </slot>
+                <slot class="inline center-vertical" name="middle"></slot>
+                <div class="inline center-vertical" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
+                    <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
+                        login-oidc-token=${this.loginOidcToken}
+                        login-oidc-provider=${this.loginOidcProvider}
+                        login-oidc-sub=${this.loginOidcSub}
+                        suppress-error-toast=${this.suppressWidgetError}
+                    ></las2peer-user-widget>
+                    <h3 id="username">${this._getUsername()}</h3>
+                </div>
             </div>
         </paper-card>
         <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}"
@@ -71,6 +85,9 @@ render() {
     static get properties() {
         return {
             service: {
+                type: String
+            },
+            subtitle: {
                 type: String
             },
             baseUrl: {
@@ -123,6 +140,9 @@ render() {
             },
             displayWidth: {
                 type: String
+            },
+            suppressWidgetError: {
+                type: Boolean
             }
         }
     }
@@ -132,13 +152,15 @@ render() {
         this._initialize();
         this.autoAppendWidget = false;
         this.service = "Unnamed Service";
+        this.subtitle = "";
         this.baseUrl = "http://127.0.0.1:8080";
         this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
         this.displayWidth = "100%";
-        this.oidcPopupSigninUrl = this.baseUrl + "/callbacks/popup-signin-callback.html";
-        this.oidcPopupSignoutUrl = this.baseUrl + "/callbacks/popup-signout-callback.html";
-        this.oidcSilentSigninUrl = this.baseUrl + "/callbacks/silent-callback.html";
+        this.oidcPopupSigninUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signin-callback.html";
+        this.oidcPopupSignoutUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signout-callback.html";
+        this.oidcSilentSigninUrl = "/node_modules/las2peer-frontend-statusbar/callbacks/silent-callback.html";
         this.useRedirect = false;
+        this.suppressWidgetError = false;
     }
 
     handleClick(e) {
@@ -199,6 +221,8 @@ render() {
             widgetHTML += " login-oidc-sub=" + this.loginOidcSub;
         if (!!this.sendCookie)
             widgetHTML += " send-cookie=true";
+        if (!!this.suppressWidgetError)
+            widgetHTML += " suppress-error-toast=true";
         widgetHTML += "></las2peer-user-widget>";
         let headerHTML = "<h3>" + this._getUsername() + "</h3>";
         this.shadowRoot.querySelector("#widget-container").innerHTML = widgetHTML + headerHTML;
@@ -213,6 +237,7 @@ render() {
         this.loginOidcSub = "";
         this._oidcUser = null;
         this.sendCookie = false;
+        this.suppressWidgetError = false;
     }
 
     _getUsername() {

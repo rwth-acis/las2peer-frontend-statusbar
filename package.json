@@ -6,6 +6,6 @@
     "dependencies": {
         "@polymer/lit-element": "^0.6.3",
         "openidconnect-signin": "github:rwth-acis/openidconnect-signin",
-        "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget#0.2.1"
+        "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget#suppressErrorToast"
     }
 }
