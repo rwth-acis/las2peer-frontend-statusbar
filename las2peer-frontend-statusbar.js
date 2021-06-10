@@ -172,7 +172,6 @@ render() {
         if (this.loggedIn)
             return;
         let userObject = event.detail;
-        this.dispatchEvent(new CustomEvent('signed-in', {detail: userObject, bubbles: true}));
         this.loggedIn = true;
         this.shadowRoot.querySelector("#widget-container").style = "cursor:auto";
         if (!userObject) {
@@ -186,6 +185,7 @@ render() {
             if (this.autoAppendWidget)
                 this._appendWidget();
         }
+           this.dispatchEvent(new CustomEvent('signed-in', {detail: userObject, bubbles: true}));
     }
 
     handleLogout() {
