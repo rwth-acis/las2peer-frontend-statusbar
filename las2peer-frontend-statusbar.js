@@ -1,4 +1,4 @@
-import {html, LitElement} from '@polymer/lit-element';
+import {html, LitElement} from 'lit-element';
 import 'openidconnect-signin/openidconnect-signin.js';
 import 'openidconnect-signin/openidconnect-popup-signin-callback.js';
 import 'openidconnect-signin/openidconnect-popup-signout-callback.js';
