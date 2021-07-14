@@ -166,8 +166,6 @@ render() {
     handleClick(e) {
         if (!this.loggedIn)
             this.shadowRoot.querySelector("#oidcButton")._handleClick();
-        if(this.loggedIn)
-            this.shadowRoot.querySelector("#oidcButton")._handleClick();
     }
 
     handleLogin(event) {
@@ -191,6 +189,7 @@ render() {
     }
 
     handleLogout() {
+        this.shadowRoot.querySelector("#oidcButton")._handleClick();
         this.dispatchEvent(new CustomEvent('signed-out'));
         if (!this.loggedIn)
             return;
