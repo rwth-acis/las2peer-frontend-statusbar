@@ -166,6 +166,8 @@ render() {
     handleClick(e) {
         if (!this.loggedIn)
             this.shadowRoot.querySelector("#oidcButton")._handleClick();
+        if(this.loggedIn)
+            this.shadowRoot.querySelector("#oidcButton")._handleClick();
     }
 
     handleLogin(event) {
