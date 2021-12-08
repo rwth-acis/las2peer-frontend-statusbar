@@ -48,7 +48,9 @@ render() {
             display: flex;
             justify-content: space-between;
           }
-          #innercontainer:first-child,
+          #innercontainer:first-child {
+            margin-left: 25px;
+          }
           #innercontainer:last-child {
             margin-left: 25px;
           }
