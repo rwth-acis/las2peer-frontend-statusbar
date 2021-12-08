@@ -52,7 +52,7 @@ render() {
             margin-left: 25px;
           }
           #innercontainer:last-child {
-            margin-left: 25px;
+            margin-right: 25px;
           }
         </style>
         <paper-card id="statusbar-container">
