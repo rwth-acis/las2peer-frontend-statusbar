@@ -24,10 +24,6 @@ render() {
                 width:${this.displayWidth};
             }
             #widget-container {
-                margin-left: auto;
-                margin-top: 0;
-                margin-bottom: 0;
-                padding: 25px 25px 10px 10px;
                 cursor: pointer;
             }
             #widget-container:hover {
@@ -36,6 +32,12 @@ render() {
             .inline{
                 display:inline-block;
             }
+            .flex{
+                display:flex;
+            }
+            .align-vertical{ 
+                align-items:center;
+            }
             .center-vertical {
                 margin-top: auto;
                 margin-bottom: auto;
@@ -43,10 +45,7 @@ render() {
             h1{
                 margin-left: 25px;
             }
-            h3 {
-                margin-left: 60px;
-                margin-top: -30px;
-            }
+            
         </style>
         <paper-card id="statusbar-container">
             <div style="display: flex">
@@ -58,7 +57,7 @@ render() {
                     </div>
                 </slot>
                 <slot class="inline center-vertical" name="middle"></slot>
-                <div class="inline center-vertical" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
+                <div class="flex align-vertical" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
                     <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
                         login-oidc-token=${this.loginOidcToken}
                         login-oidc-provider=${this.loginOidcProvider}
