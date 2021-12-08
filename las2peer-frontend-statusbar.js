@@ -25,6 +25,7 @@ render() {
             }
             #widget-container {
                 cursor: pointer;
+                align-self:end;
             }
             #widget-container:hover {
                 background: #5691f5;
