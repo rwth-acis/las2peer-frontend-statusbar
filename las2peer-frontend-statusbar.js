@@ -44,12 +44,13 @@ render() {
             margin-top: auto;
             margin-bottom: auto;
           }
-          h1 {
-            margin-left: 25px;
-          }
           #innercontainer {
             display: flex;
             justify-content: space-between;
+          }
+          #innercontainer:first-child,
+          #innercontainer:last-child {
+            margin-left: 25px;
           }
         </style>
         <paper-card id="statusbar-container">
