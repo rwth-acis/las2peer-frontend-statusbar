@@ -25,9 +25,8 @@ render() {
           }
           #widget-container {
             cursor: pointer;
-            align-self: end;
-            margin-left: 5px;
-            margin-right: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
           }
           #widget-container:hover {
             background: #5691f5;
@@ -48,9 +47,13 @@ render() {
           h1 {
             margin-left: 25px;
           }
+          #innercontainer {
+            display: flex;
+            justify-content: space-between;
+          }
         </style>
         <paper-card id="statusbar-container">
-          <div style="display: flex">
+          <div id="innercontainer">
             <!-- <slot class="inline center-vertical" name="left"></slot> -->
             <slot class="inline" name="title">
               <div style="display: flex; flex-flow: column">
