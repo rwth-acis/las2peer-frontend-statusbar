@@ -11,65 +11,82 @@ class Las2peerFrontendStatusbar extends LitElement {
 render() {
       return html`
         <style>
-            :host([background]) {
-                background: var(--statusbar-background, #fff);
-                display: block;
-            }
-            paper-card {
-              --paper-card-background-color: var(--statusbar-background, #fff);
-            }
+          :host([background]) {
+            background: var(--statusbar-background, #fff);
+            display: block;
+          }
+          paper-card {
+            --paper-card-background-color: var(--statusbar-background, #fff);
+          }
 
-            #statusbar-container{
-                display:inline-block;
-                width:${this.displayWidth};
-            }
-            #widget-container {
-                cursor: pointer;
-                align-self:end;
-            }
-            #widget-container:hover {
-                background: #5691f5;
-            }
-            .inline{
-                display:inline-block;
-            }
-            .flex{
-                display:flex;
-            }
-            .align-vertical{ 
-                align-items:center;
-            }
-            .center-vertical {
-                margin-top: auto;
-                margin-bottom: auto;
-            }
-            h1{
-                margin-left: 25px;
-            }
-            
+          #statusbar-container {
+            display: inline-block;
+            width: ${this.displayWidth};
+          }
+          #widget-container {
+            cursor: pointer;
+            align-self: end;
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+          #widget-container:hover {
+            background: #5691f5;
+          }
+          .inline {
+            display: inline-block;
+          }
+          .flex {
+            display: flex;
+          }
+          .align-vertical {
+            align-items: center;
+          }
+          .center-vertical {
+            margin-top: auto;
+            margin-bottom: auto;
+          }
+          h1 {
+            margin-left: 25px;
+          }
         </style>
         <paper-card id="statusbar-container">
-            <div style="display: flex">
-                <slot class="inline center-vertical" name="left"></slot>
-                <slot class="inline" name="title">
-                    <div style="display: flex; flex-flow: column">
-                        <h1 id="service-title">${this.service}</h1>
-                        <h5 style="margin-left: 25px; margin-top: -30px;" id="subtitle">${this.subtitle}</h5>
-                    </div>
-                </slot>
-                <slot class="inline center-vertical" name="middle"></slot>
-                <div class="flex align-vertical" id="widget-container" @click=${this.handleClick} @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}">
-                    <las2peer-user-widget id="widget" base-url=${this.baseUrl} login-name=${this.loginName} login-password=${this.loginPassword}
-                        login-oidc-token=${this.loginOidcToken}
-                        login-oidc-provider=${this.loginOidcProvider}
-                        login-oidc-sub=${this.loginOidcSub}
-                        suppress-error-toast=${this.suppressWidgetError}
-                    ></las2peer-user-widget>
-                    <h3 id="username">${this._getUsername()}</h3>
-                </div>
+          <div style="display: flex">
+            <!-- <slot class="inline center-vertical" name="left"></slot> -->
+            <slot class="inline" name="title">
+              <div style="display: flex; flex-flow: column">
+                <h1 id="service-title">${this.service}</h1>
+                <h5 style="margin-left: 25px; margin-top: -30px;" id="subtitle">
+                  ${this.subtitle}
+                </h5>
+              </div>
+            </slot>
+            <slot class="inline center-vertical" name="middle"></slot>
+            <div
+              class="flex align-vertical"
+              id="widget-container"
+              @click=${this.handleClick}
+              @signed-in="${this.handleLogin}"
+              @signed-out="${this.handleLogout}"
+            >
+              <las2peer-user-widget
+                id="widget"
+                base-url=${this.baseUrl}
+                login-name=${this.loginName}
+                login-password=${this.loginPassword}
+                login-oidc-token=${this.loginOidcToken}
+                login-oidc-provider=${this.loginOidcProvider}
+                login-oidc-sub=${this.loginOidcSub}
+                suppress-error-toast=${this.suppressWidgetError}
+              ></las2peer-user-widget>
+              <h3 id="username">${this._getUsername()}</h3>
             </div>
+          </div>
         </paper-card>
-        <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}"
+        <openidconnect-signin
+          id="oidcButton"
+          style="display:none"
+          @signed-in="${this.handleLogin}"
+          @signed-out="${this.handleLogout}"
           scope="openid profile email"
           clientid="${this.oidcClientId}"
           authority="${this.oidcAuthority}"
@@ -79,7 +96,7 @@ render() {
           silentredirecturi="${this.oidcSilentSigninUrl}"
           ?useRedirect="${this.useRedirect}"
         ></openidconnect-signin>
-        `;
+      `;
     }
 
     static get properties() {
