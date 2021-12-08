@@ -25,8 +25,8 @@ render() {
           }
           #widget-container {
             cursor: pointer;
-            margin-left: 10px;
-            margin-right: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
           }
           #widget-container:hover {
             background: #5691f5;
