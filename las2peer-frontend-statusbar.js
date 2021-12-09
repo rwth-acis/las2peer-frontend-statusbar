@@ -34,6 +34,9 @@ render() {
           .inline {
             display: inline-block;
           }
+          .inline + .inline {
+              margin-left: 5px;
+          }
           .flex {
             display: flex;
           }
@@ -46,13 +49,13 @@ render() {
           }
           #innercontainer {
             display: flex;
-            justify-content: space-between;
           }
           #innercontainer:first-child {
             margin-left: 25px;
           }
           #innercontainer:last-child {
             margin-right: 25px;
+            margin-left: auto;
           }
         </style>
         <paper-card id="statusbar-container">
@@ -87,7 +90,9 @@ render() {
               <h3 id="username">${this._getUsername()}</h3>
             </div>
         </paper-card>
-        <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}"
+        <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${
+          this.handleLogin
+        }" @signed-out="${this.handleLogout}"
           scope="openid profile email"
           clientid="${this.oidcClientId}"
           authority="${this.oidcAuthority}"
