@@ -19,10 +19,7 @@ render() {
               --paper-card-background-color: var(--statusbar-background, #fff);
             }
 
-          #statusbar-container {
-            display: inline-block;
-            width: ${this.displayWidth};
-          }
+          
           #widget-container {
             cursor: pointer;
             padding-left: 10px;
@@ -55,7 +52,11 @@ render() {
           }
           #innercontainer:last-child {
             margin-right: 25px;
-            margin-left: auto;
+            margin-left: auto!important;
+          }
+          #statusbar-container {
+            display: inline-block;
+            width: ${this.displayWidth};
           }
         </style>
         <paper-card id="statusbar-container">
