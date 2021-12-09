@@ -11,13 +11,13 @@ class Las2peerFrontendStatusbar extends LitElement {
 render() {
       return html`
         <style>
-          :host([background]) {
-            background: var(--statusbar-background, #fff);
-            display: block;
-          }
-          paper-card {
-            --paper-card-background-color: var(--statusbar-background, #fff);
-          }
+            :host([background]) {
+                background: var(--statusbar-background, #fff);
+                display: block;
+            }
+            paper-card {
+              --paper-card-background-color: var(--statusbar-background, #fff);
+            }
 
           #statusbar-container {
             display: inline-block;
@@ -57,7 +57,7 @@ render() {
         </style>
         <paper-card id="statusbar-container">
           <div id="innercontainer">
-            <!-- <slot class="inline center-vertical" name="left"></slot> -->
+            <slot class="inline center-vertical" name="left"></slot>
             <slot class="inline" name="title">
               <div style="display: flex; flex-flow: column">
                 <h1 id="service-title">${this.service}</h1>
@@ -86,13 +86,8 @@ render() {
               ></las2peer-user-widget>
               <h3 id="username">${this._getUsername()}</h3>
             </div>
-          </div>
         </paper-card>
-        <openidconnect-signin
-          id="oidcButton"
-          style="display:none"
-          @signed-in="${this.handleLogin}"
-          @signed-out="${this.handleLogout}"
+        <openidconnect-signin id="oidcButton" style="display:none" @signed-in="${this.handleLogin}" @signed-out="${this.handleLogout}"
           scope="openid profile email"
           clientid="${this.oidcClientId}"
           authority="${this.oidcAuthority}"
@@ -102,7 +97,7 @@ render() {
           silentredirecturi="${this.oidcSilentSigninUrl}"
           ?useRedirect="${this.useRedirect}"
         ></openidconnect-signin>
-      `;
+        `;
     }
 
     static get properties() {
