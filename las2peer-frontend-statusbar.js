@@ -45,13 +45,14 @@ class Las2peerFrontendStatusbar extends LitElement {
         #innercontainer {
           display: flex;
         }
-        #innercontainer:first-child {
+        /* #innercontainer:first-child {
           margin-left: 25px;
         }
         #innercontainer:last-child {
-          margin-right: 25px;
+          margin-right: 25px; 
           margin-left: auto !important;
-        }
+        } */
+        /* rules are not working for some reason so they are set on the respective elements as style attribute  */
         #statusbar-container {
           display: inline-block;
           width: ${this.displayWidth};
@@ -59,7 +60,11 @@ class Las2peerFrontendStatusbar extends LitElement {
       </style>
       <paper-card id="statusbar-container">
         <div id="innercontainer">
-          <slot class="inline center-vertical" name="left"></slot>
+          <slot
+            class="inline center-vertical"
+            name="left"
+            style="margin-left:25px"
+          ></slot>
           <slot class="inline" name="title">
             <div style="display: flex; flex-flow: column">
               <h1 id="service-title">${this.service}</h1>
@@ -70,6 +75,7 @@ class Las2peerFrontendStatusbar extends LitElement {
           </slot>
           <slot class="inline center-vertical" name="middle"></slot>
           <div
+            style="margin-left: auto; margin-right: 25px;"
             class="flex align-vertical"
             id="widget-container"
             @click=${this.handleClick}
