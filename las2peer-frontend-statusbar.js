@@ -24,7 +24,7 @@ class Las2peerFrontendStatusbar extends LitElement {
           padding-right: 10px;
         }
         #widget-container:hover {
-          background: #5691f5;
+          background: lightcoral;
         }
         .inline {
           display: inline-block;
@@ -44,6 +44,7 @@ class Las2peerFrontendStatusbar extends LitElement {
         }
         #innercontainer {
           display: flex;
+          color: white;
         }
         .last {
           margin-left: auto;
@@ -178,7 +179,7 @@ class Las2peerFrontendStatusbar extends LitElement {
     this.autoAppendWidget = false;
     this.service = "Unnamed Service";
     this.subtitle = "";
-    this.baseUrl = "http://127.0.0.1:8080";
+    this.baseUrl = "http://localhost:8081";
     this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
     this.displayWidth = "100%";
     this.oidcPopupSigninUrl =
@@ -189,6 +190,22 @@ class Las2peerFrontendStatusbar extends LitElement {
       "/node_modules/las2peer-frontend-statusbar/callbacks/silent-callback.html";
     this.useRedirect = false;
     this.suppressWidgetError = false;
+  }
+
+  // Send login request to las2peer backend in order to get a cookie
+  fetchCookie() {
+    fetch(this.baseUrl + "/las2peer/auth/login/", {headers:{
+        "Authorization":
+          `Basic ${btoa(this.loginName + ':' + this.loginOidcSub)}`,
+        "access-token": this.loginOidcToken,
+        "oidc_provider": this.loginOidcProvider
+        }}).then(response => {
+        if (!response.ok) {
+          response.text().then(data => console.log("Error: " + data));
+        }
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
   handleClick(e) {
@@ -211,9 +228,11 @@ class Las2peerFrontendStatusbar extends LitElement {
       if (userObject.token_type !== "Bearer")
         throw "unexpected OIDC token type, fix me";
       this._oidcUser = userObject;
+      this.loginName = this._oidcUser.profile.preferred_username;
       this.loginOidcToken = this._oidcUser.access_token;
       this.loginOidcProvider = this.oidcAuthority;
       this.loginOidcSub = this._oidcUser.profile.sub;
+      this.fetchCookie();
       if (this.autoAppendWidget) this._appendWidget();
     }
   }
