@@ -271,7 +271,7 @@ class Las2peerFrontendStatusbar extends LitElement {
   }
 
   _getUsername() {
-    if (!this.loggedIn) return "Login";
+    if (!this.loggedIn) return "SSO Login";
     if (!!this.loginName) return this.loginName;
     let widget = this.shadowRoot.querySelector("#widget");
     let fullName = "";
