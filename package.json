@@ -1,6 +1,6 @@
 {
   "name": "las2peer-frontend-statusbar",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A polymer widget which uses the las2peer Contact and UserInformation Service as well as the openId connect service",
   "main": "las2peer-frontend-statusbar.js",
   "dependencies": {
