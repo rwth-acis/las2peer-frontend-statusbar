@@ -60,7 +60,7 @@ class Las2peerFrontendStatusbar extends LitElement {
       <paper-card id="statusbar-container">
         <div id="innercontainer">
           <slot class="inline center-vertical first" name="left"></slot>
-          <slot class="inline" name="title">
+          <slot class="inline center-vertical flex" name="title">
             <div style="display: flex; flex-flow: column">
               <h1 id="service-title">${this.service}</h1>
               <h5 style="margin-left: 25px; margin-top: -30px;" id="subtitle">
