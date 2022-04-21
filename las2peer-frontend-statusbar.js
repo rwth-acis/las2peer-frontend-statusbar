@@ -179,7 +179,7 @@ class Las2peerFrontendStatusbar extends LitElement {
     this.service = "Unnamed Service";
     this.subtitle = "";
     this.baseUrl = "http://127.0.0.1:8080";
-    this.oidcAuthority = "https://api.learning-layers.eu/o/oauth2";
+    this.oidcAuthority = "https://auth.las2peer.org/auth/realms/main";
     this.displayWidth = "100%";
     this.oidcPopupSigninUrl =
       "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signin-callback.html";
@@ -219,19 +219,13 @@ class Las2peerFrontendStatusbar extends LitElement {
   }
 
   handleLogout() {
-    this.dispatchEvent(new CustomEvent("signed-out"));
     if (!this.loggedIn) return;
+    this.shadowRoot.querySelector("#oidcButton")._handleClick();
+    this.dispatchEvent(new CustomEvent("signed-out"));
     console.log("logged out ", this._getUsername());
     this._initialize();
     if (this.autoAppendWidget) this._appendWidget();
     this.shadowRoot.querySelector("#widget-container").style = "cursor:default";
-    let i = document.createElement("iframe");
-    i.style.display = "none";
-    i.onload = function () {
-      i.parentNode.removeChild(i);
-    };
-    i.src = "https://api.learning-layers.eu/o/oauth2/logout";
-    document.body.appendChild(i);
   }
 
   _appendWidget() {
