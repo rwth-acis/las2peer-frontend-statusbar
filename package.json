@@ -6,6 +6,6 @@
   "dependencies": {
     "las2peer-frontend-user-widget": "github:rwth-acis/las2peer-frontend-user-widget#0.3.3",
     "lit-element": "^2.5.1",
-    "openidconnect-signin": "github:rwth-acis/openidconnect-signin"
+    "keycloak-js": "^18.0.0"
   }
 }

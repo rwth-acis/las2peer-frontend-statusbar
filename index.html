@@ -1,56 +1,36 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-        <title>las2peer-frontend-statusbar demo</title>
+    <title>las2peer-frontend-statusbar demo</title>
+    <script>var exports = {}</script>
 
-        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-        <!-- import Bootstrap for responsive UI (must) -->
-        <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- import Bootstrap for responsive UI (must) -->
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
-        <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
-        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-        <script type="module" src="las2peer-frontend-statusbar.js"></script>
+    <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module" src="las2peer-frontend-statusbar.js"></script>
 
-        <style is="custom-style" include="demo-pages-shared-styles"></style>
-    </head>
-    <body>
-        <noscript>
-            Please enable JavaScript to view this website.
-        </noscript>
-        <div class="vertical-section-container centered">
-            <h3>Basic las2peer-frontend-statusbar demo</h3>
-            <las2peer-frontend-statusbar service="Demo" displaywidth="500px" baseurl="http://localhost:8081"
-              oidcpopupsigninurl="http://localhost:8081/callbacks/popup-signin-callback.html"
-              oidcpopupsignouturl="http://localhost:8081/callbacks/popup-signout-callback.html"
-              oidcsilentsigninurl="http://localhost:8081/callbacks/silent-callback.html"
-              oidcclientid="2440e436-1132-4e77-abf6-edde90f24a6b"
-              autoAppendWidget=true
-              suppressWidgetError=true
-            ></las2peer-frontend-statusbar>
-        </div>
-        <div class="vertical-section-container centered">
-            <h3>las2peer-frontend-statusbar demo with slots</h3>
-            <las2peer-frontend-statusbar service="Demo" displaywidth="700px"
-                                         baseurl="http://localhost:8081"
-                                         oidcpopupsigninurl="http://localhost:8081/callbacks/popup-signin-callback.html"
-                                         oidcpopupsignouturl="http://localhost:8081/callbacks/popup-signout-callback.html"
-                                         oidcsilentsigninurl="http://localhost:8081/callbacks/silent-callback.html"
-                                         oidcclientid="2440e436-1132-4e77-abf6-edde90f24a6b"
-                                         autoAppendWidget=true
-            >
-                <button slot="left">Left</button>
-                <h2 slot="title">Overridden Title</h2>
-                <select slot="middle">
-                    <option>middle</option>
-                    <option>------</option>
-                    <option>German</option>
-                    <option>English</option>
-                </select>
-            </las2peer-frontend-statusbar>
-        </div>
-    </body>
+    <style is="custom-style" include="demo-pages-shared-styles"></style>
+</head>
+<body>
+<noscript>
+    Please enable JavaScript to view this website.
+</noscript>
+<div class="vertical-section-container centered">
+    <h3>Basic las2peer-frontend-statusbar demo</h3>
+    <las2peer-frontend-statusbar service="Demo" displaywidth="500px" baseurl="http://localhost:8081"
+                                 oidcAuthority="https://auth.las2peer.org/auth"
+                                 oidcClientId="localtestclient"
+                                 kcRealm="main"
+                                 autoAppendWidget=true
+                                 suppressWidgetError=true
+    ></las2peer-frontend-statusbar>
+</div>
+</body>
 </html>
