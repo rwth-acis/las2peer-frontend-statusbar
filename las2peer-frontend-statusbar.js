@@ -1,61 +1,136 @@
-import { html, LitElement } from "lit-element";
-import "las2peer-frontend-user-widget/las2peer-user-widget.js";
+import {html, css, LitElement, unsafeCSS} from "lit";
+import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
 import "keycloak-js/dist/keycloak.js";
 
 export class Las2peerFrontendStatusbar extends LitElement {
 
+  static get styles() {
+    return css`
+      :host([background]) {
+        background: var(--statusbar-background, #fff);
+        display: block;
+      }
+      paper-card {
+        --paper-card-background-color: var(--statusbar-background, #fff);
+      }
+      #widget-container {
+        cursor: pointer;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      #widget-container:hover {
+        background: #5691f5;
+      }
+      .inline {
+        display: inline-block;
+      }
+      .inline + .inline {
+        margin-left: 5px;
+      }
+      .flex {
+        display: flex;
+      }
+      .align-vertical {
+        align-items: center;
+      }
+      .center-vertical {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+      #innercontainer {
+        display: flex;
+      }
+      .last {
+        margin-left: auto;
+        margin-right: 25px;
+      }
+      .first {
+        margin-left: 25px;
+      }
+      #statusbar-container {
+        display: inline-block;
+        width: 100%;
+      }
+      
+      button {
+          border: 0px;
+      }
+      button:focus {
+          outline: none;
+      }
+      #circular {
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+          -webkit-border-radius: 20px;
+          -moz-border-radius: 20px;
+          box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+          -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+          -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+      }
+      .dropdown-content {
+          background-color: white;
+          line-height: 20px;
+          border-radius: 1px;
+          box-shadow: 0px 1px 1px #ccc;
+          outline: none;
+          margin-top: 42px;
+          z-index: 5000;
+      }
+      #dropdown-button {           
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+          -webkit-border-radius: 20px;
+          -moz-border-radius: 20px;
+          background-image: url('https://raw.githubusercontent.com/rwth-acis/las2peer-frontend-user-widget/master/learning-layers.svg');
+          background-size: 100% 100%;
+          background-color: var(--user-widget-button-background, rgba(0, 0, 0, 0));
+          box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+          -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+          -moz-box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+          position: relative;
+          border: 1px solid white;
+      }
+      #dropdown-button:hover {
+          cursor: pointer;
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+          -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, .9);
+          -moz-box-shadow: 0 0 12px rgba(0, 0, 0, .9);
+      }
+      a {
+          display: block;
+          position: relative;
+          padding: 1em;
+          text-decoration: none;
+      }
+      ul {
+          margin: 0;
+          padding: 0;
+      }
+      li {
+          display: block;
+          position: relative;
+          margin: 0;
+          padding: 0;
+      }
+      li:not(:last-of-type) {
+          border-bottom: 1px solid #eee;
+      }
+      a {
+          color: #337ab7;
+          text-decoration: none;
+      }
+      a:hover, a:focus{
+        color: #23527c;
+          text-decoration: none;
+      }
+    `;
+  }
 
   render() {
     return html`
-      <style>
-        :host([background]) {
-          background: var(--statusbar-background, #fff);
-          display: block;
-        }
-        paper-card {
-          --paper-card-background-color: var(--statusbar-background, #fff);
-        }
-
-        #widget-container {
-          cursor: pointer;
-          padding-left: 10px;
-          padding-right: 10px;
-        }
-        #widget-container:hover {
-          background: #5691f5;
-        }
-        .inline {
-          display: inline-block;
-        }
-        .inline + .inline {
-          margin-left: 5px;
-        }
-        .flex {
-          display: flex;
-        }
-        .align-vertical {
-          align-items: center;
-        }
-        .center-vertical {
-          margin-top: auto;
-          margin-bottom: auto;
-        }
-        #innercontainer {
-          display: flex;
-        }
-        .last {
-          margin-left: auto;
-          margin-right: 25px;
-        }
-        .first {
-          margin-left: 25px;
-        }
-        #statusbar-container {
-          display: inline-block;
-          width: ${this.displayWidth};
-        }
-      </style>
       <paper-card id="statusbar-container">
         <div id="innercontainer">
           <slot class="inline center-vertical first" name="left"></slot>
@@ -72,25 +147,44 @@ export class Las2peerFrontendStatusbar extends LitElement {
             class="flex align-vertical last"
             id="widget-container"
             @click="${this.handleClick}"
-            // @signed-in="${this.handleLogin}"
-            // @signed-out="${this.handleLogout}"
           >
+          <button class="dropdown-trigger" id="dropdown-button">
+            <iron-dropdown id="dropdown">
+              <div class="dropdown-content" slot="dropdown-content">
+                <ul tabindex="0">
+                  <li><a href="javascript:void(0)" @click="${this._editProfile}">Edit profile</a>
+                  </li>
+                  <li><a href="javascript:void(0)" @click="${this._editRights}">Change privacy</a>
+                  </li>
+                  <li><a href="javascript:void(0)" @click="${this._editContacts}">Manage Contacts</a>
+                  </li>
+                  <li><a href="javascript:void(0)" @click="${this._editGroups}">Manage Groups</a>
+                  </li>
+                  <li><a href="javascript:void(0)" @click="${this._addressbook}">Addressbook</a>
+                  </li>
+                  <li><a href="javascript:void(0)" @click="${this._handleLogout}">Logout</a>
+                  </li>
+                </ul>
+              </div>
+            </iron-dropdown>
             <las2peer-user-widget
               id="widget"
-              base-url=${this.baseUrl}
-              login-name=${this.loginName} 
-              login-password=${this.loginPassword}
-              login-oidc-token=${this.oidcAccessToken}
-              login-oidc-provider=${this.loginOidcProvider}
-              login-oidc-sub=${this.oidcUserSub}
-              suppress-error-toast=${this.suppressWidgetError}
-            ></las2peer-user-widget>
-            <h3 id="username">${this.loginName == "" ? "SSO Login" : this.loginName}</h3>
+              baseurl=${this.baseUrl}
+              loginname=${this.loginName}
+              loginpassword=${this.loginPassword}
+              oidcaccesstoken=${this.oidcAccessToken}
+              oidcissuerurl=${this.oidcIssuerUrl}
+              oidcusersub=${this.oidcUserSub}
+              suppresserrortoast=${this.suppressWidgetError}
+            ></las2peer-user-widget></button>
+            <h3 id="username">${this.loginName ===  "" ? "SSO Login" : this.loginName}</h3>
           </div>
         </div>
       </paper-card>
     `;
   }
+
+
 
   static get properties() {
     return {
@@ -122,7 +216,7 @@ export class Las2peerFrontendStatusbar extends LitElement {
         type: String,
       },
       // TODO: use oidcAuthority instead
-      loginOidcProvider: {
+      oidcIssuerUrl: {
         type: String,
       },
       oidcUserSub: {
@@ -133,9 +227,6 @@ export class Las2peerFrontendStatusbar extends LitElement {
       },
 
       // other stuff
-      displayWidth: {
-        type: String,
-      },
       service: {
         type: String,
       },
@@ -154,7 +245,7 @@ export class Las2peerFrontendStatusbar extends LitElement {
     this.loginName = "";
     this.loginPassword = "";
     this.oidcAccessToken = "";
-    this.loginOidcProvider = "";
+    this.oidcIssuerUrl = "";
     this.oidcUserSub = "";
     this.suppressWidgetError = false;
     this.oidcAuthority = "";
@@ -164,48 +255,27 @@ export class Las2peerFrontendStatusbar extends LitElement {
     this.service = "Unnamed Service";
     this.subtitle = "";
     this.baseUrl = "http://127.0.0.1:8080";
-    this.displayWidth = "100%";
+
+    window.addEventListener("keycloakLogin", this._handleLogin);
+    window.addEventListener("signed-out", this._handleLogout);
   }
 
   _handleLogin(e) {
+    console.log("logging in");
     console.log(this)
   }
 
   _handleLogout(e) {
+    console.log("logging out");
     console.log(this);
     console.log(e);
-  }
-
-  //TODO: check if still needed
-  handleLogin(event) {
-
-    if (this.loggedIn) return;
-    let userObject = event.detail;
-    this.dispatchEvent(
-        new CustomEvent("signed-in", { detail: userObject, bubbles: true })
-    );
-    this.loggedIn = true;
-    this.shadowRoot.querySelector("#widget-container").style = "cursor:auto";
-    if (!userObject) {
-      this.shadowRoot.querySelector("#username").innerHTML =
-          this._getUsername();
-    } else {
-      if (userObject.token_type !== "Bearer")
-        throw "unexpected OIDC token type, fix me";
-      this._oidcUser = userObject;
-      this.loginOidcToken = this._oidcUser.access_token;
-      this.loginOidcProvider = this.oidcAuthority;
-      this.loginOidcSub = this._oidcUser.profile.sub;
-      if (this.autoAppendWidget) this._appendWidget();
-    }
+    this.keycloak.logout();
   }
 
   firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
     console.log("firstUpdated");
     console.log(this);
-    window.addEventListener("keycloakLogin", this._handleLogin);
-    window.addEventListener("signed-out", this._handleLogout);
     this.keycloak = new Keycloak({
       url: this.oidcAuthority,
       realm: this.kcRealm,
@@ -224,6 +294,7 @@ export class Las2peerFrontendStatusbar extends LitElement {
           let idToken = kc.idTokenParsed;
           l2pStatBar.loginName = idToken.preferred_username;
           l2pStatBar.oidcUserSub = idToken.sub;
+          l2pStatBar.oidcIssuerUrl = kc.authServerUrl + "/realms/" + l2pStatBar.kcRealm;
           l2pStatBar.loggedIn = true;
         } else {
           console.log("not authenticated");
@@ -235,7 +306,59 @@ export class Las2peerFrontendStatusbar extends LitElement {
   handleClick() {
     if (!this.loggedIn) {
       this.keycloak.login();
+    } else {
+      this.shadowRoot.getElementById("dropdown").open();
     }
+  }
+
+  _editProfile(event) {
+    console.log("editing profile");
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "1");
+  }
+
+  _editRights(event) {
+    console.log("editing rights")
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "2");
+    // TODO: move this to user-widget
+    // var dialog = this.$.editRights;
+    // if (dialog) {
+    //   this.$.ajaxGetPermissions.generateRequest();
+    //   this.$.ajaxGetAddressbook.generateRequest();
+    //   dialog.open();
+    // }
+  }
+
+  _editContacts(event) {
+    console.log("editing contacts");
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "3");
+    // TODO move this to user-widget
+    // var dialog = this.$.editContacts;
+    // if (dialog) {
+    //   dialog.open();
+    //   this.$.ajaxGetContacts.generateRequest();
+    // }
+  }
+
+  _editGroups(event) {
+    console.log("editing groups");
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "4");
+    // TODO move this to user-widget
+    // var dialog = this.$.editGroups;
+    // if (dialog) {
+    //   dialog.open();
+    //   this.$.ajaxGetGroups.generateRequest();
+    // }
+  }
+
+  _addressbook(event) {
+    console.log("show addressbook");
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "5");
+    // TODO mvoe this to user-widget
+    // var dialog = this.$.addressbook;
+    // if (dialog) {
+    //   dialog.open();
+    //   this.$.ajaxGetAddressbook.generateRequest();
+    // }
   }
 
 }

@@ -24,13 +24,15 @@
 </noscript>
 <div class="vertical-section-container centered">
     <h3>Basic las2peer-frontend-statusbar demo</h3>
-    <las2peer-frontend-statusbar service="Demo" displaywidth="500px" baseurl="http://localhost:8081"
-                                 oidcAuthority="https://auth.las2peer.org/auth"
-                                 oidcClientId="localtestclient"
-                                 kcRealm="main"
-                                 autoAppendWidget=true
-                                 suppressWidgetError=true
-    ></las2peer-frontend-statusbar>
+    <div style="width: 50%;">
+        <las2peer-frontend-statusbar service="Demo" baseurl="https://las2peer.tech4comp.dbis.rwth-aachen.de"
+                                     oidcAuthority="https://auth.las2peer.org/auth"
+                                     oidcClientId="localtestclient"
+                                     kcRealm="main"
+                                     autoAppendWidget=true
+                                     suppressWidgetError=true
+        ></las2peer-frontend-statusbar>
+    </div>
 </div>
 </body>
 </html>
