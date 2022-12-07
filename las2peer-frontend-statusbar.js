@@ -1,4 +1,4 @@
-import {html, css, LitElement, unsafeCSS} from "lit";
+import {html, css, LitElement} from "lit";
 import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
 import "keycloak-js/dist/keycloak.js";
@@ -184,8 +184,6 @@ export class Las2peerFrontendStatusbar extends LitElement {
     `;
   }
 
-
-
   static get properties() {
     return {
       // keycloak stuff
@@ -215,7 +213,6 @@ export class Las2peerFrontendStatusbar extends LitElement {
       oidcAccessToken: {
         type: String,
       },
-      // TODO: use oidcAuthority instead
       oidcIssuerUrl: {
         type: String,
       },
@@ -251,51 +248,45 @@ export class Las2peerFrontendStatusbar extends LitElement {
     this.oidcAuthority = "";
     this.kcRealm = "main";
     this.oidcClientId = "";
-
     this.service = "Unnamed Service";
     this.subtitle = "";
     this.baseUrl = "http://127.0.0.1:8080";
 
-    window.addEventListener("keycloakLogin", this._handleLogin);
+    // window.addEventListener("sign-in", this._handleLogin);
     window.addEventListener("signed-out", this._handleLogout);
   }
 
-  _handleLogin(e) {
-    console.log("logging in");
-    console.log(this)
-  }
+  /**
+   * not needed at the moment. But it can be used to handle logins triggered by an event
+   */
+  // _handleLogin() {
+  //   console.log("logging in");
+  //   console.log(this)
+  // }
 
-  _handleLogout(e) {
-    console.log("logging out");
-    console.log(this);
-    console.log(e);
+  _handleLogout() {
     this.keycloak.logout();
   }
 
   firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
-    console.log("firstUpdated");
-    console.log(this);
     this.keycloak = new Keycloak({
       url: this.oidcAuthority,
       realm: this.kcRealm,
       clientId: this.oidcClientId,
     });
     if (!this.loggedIn) {
-      let kc = this.keycloak;
-      let l2pStatBar = this;
       this.keycloak.init({
         onLoad: "check-sso",
         silentCheckSsoRedirectUri: window.location.origin + '/callbacks/silent-check-sso.html',
-      }).then(function (authenticated) {
+      }).then((authenticated) => {
         if (authenticated) {
-          console.log("authenticated");
-          l2pStatBar.oidcAccessToken = kc.token;
-          let idToken = kc.idTokenParsed;
-          l2pStatBar.loginName = idToken.preferred_username;
-          l2pStatBar.oidcUserSub = idToken.sub;
-          l2pStatBar.oidcIssuerUrl = kc.authServerUrl + "/realms/" + l2pStatBar.kcRealm;
-          l2pStatBar.loggedIn = true;
+          this.oidcAccessToken = this.keycloak.token;
+          let idToken = this.keycloak.idTokenParsed;
+          this.loginName = idToken.preferred_username;
+          this.oidcUserSub = idToken.sub;
+          this.oidcIssuerUrl = this.keycloak.authServerUrl + "/realms/" + this.kcRealm;
+          this.loggedIn = true;
         } else {
           console.log("not authenticated");
         }
@@ -311,54 +302,24 @@ export class Las2peerFrontendStatusbar extends LitElement {
     }
   }
 
-  _editProfile(event) {
-    console.log("editing profile");
+  _editProfile() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "1");
   }
 
-  _editRights(event) {
-    console.log("editing rights")
+  _editRights() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "2");
-    // TODO: move this to user-widget
-    // var dialog = this.$.editRights;
-    // if (dialog) {
-    //   this.$.ajaxGetPermissions.generateRequest();
-    //   this.$.ajaxGetAddressbook.generateRequest();
-    //   dialog.open();
-    // }
   }
 
-  _editContacts(event) {
-    console.log("editing contacts");
+  _editContacts() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "3");
-    // TODO move this to user-widget
-    // var dialog = this.$.editContacts;
-    // if (dialog) {
-    //   dialog.open();
-    //   this.$.ajaxGetContacts.generateRequest();
-    // }
   }
 
-  _editGroups(event) {
-    console.log("editing groups");
+  _editGroups() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "4");
-    // TODO move this to user-widget
-    // var dialog = this.$.editGroups;
-    // if (dialog) {
-    //   dialog.open();
-    //   this.$.ajaxGetGroups.generateRequest();
-    // }
   }
 
-  _addressbook(event) {
-    console.log("show addressbook");
+  _addressbook() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "5");
-    // TODO mvoe this to user-widget
-    // var dialog = this.$.addressbook;
-    // if (dialog) {
-    //   dialog.open();
-    //   this.$.ajaxGetAddressbook.generateRequest();
-    // }
   }
 
 }
