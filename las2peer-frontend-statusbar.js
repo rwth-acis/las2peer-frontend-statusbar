@@ -1,6 +1,7 @@
 import {html, css, LitElement} from "lit";
 import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
+import "@polymer/iron-dropdown/iron-dropdown.js";
 import "keycloak-js/dist/keycloak.js";
 
 export class Las2peerFrontendStatusbar extends LitElement {
@@ -252,17 +253,16 @@ export class Las2peerFrontendStatusbar extends LitElement {
     this.subtitle = "";
     this.baseUrl = "http://127.0.0.1:8080";
 
-    // window.addEventListener("sign-in", this._handleLogin);
+    window.addEventListener("sign-in", this._handleLogin);
     window.addEventListener("signed-out", this._handleLogout);
   }
 
   /**
    * not needed at the moment. But it can be used to handle logins triggered by an event
    */
-  // _handleLogin() {
-  //   console.log("logging in");
-  //   console.log(this)
-  // }
+  _handleLogin() {
+    this.keycloak.login();
+  }
 
   _handleLogout() {
     this.keycloak.logout();
