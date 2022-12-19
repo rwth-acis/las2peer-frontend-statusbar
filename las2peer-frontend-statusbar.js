@@ -287,6 +287,8 @@ export class Las2peerFrontendStatusbar extends LitElement {
           this.oidcUserSub = idToken.sub;
           this.oidcIssuerUrl = this.keycloak.authServerUrl + "/realms/" + this.kcRealm;
           this.loggedIn = true;
+          let event = new CustomEvent("signed-in", {bubbles: true, detail: {profile: idToken}});
+          this.dispatchEvent(event);
         } else {
           console.log("not authenticated");
         }

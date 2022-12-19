@@ -7,7 +7,6 @@ import "@polymer/iron-icons/editor-icons.js";
 import "@polymer/iron-icon/iron-icon.js";
 import "@polymer/paper-input/paper-input.js";
 import "@polymer/paper-input/paper-textarea.js";
-import "@polymer/paper-dropdown-menu/paper-dropdown-menu.js";
 import "@polymer/paper-dialog/paper-dialog.js";
 import "@polymer/paper-toast/paper-toast.js";
 import "@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js";
