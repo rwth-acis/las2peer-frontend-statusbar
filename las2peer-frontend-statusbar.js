@@ -246,7 +246,7 @@ export class Las2peerFrontendStatusbar extends LitElement {
     this.oidcIssuerUrl = "";
     this.oidcUserSub = "";
     this.suppressWidgetError = false;
-    this.oidcAuthority = "";
+    this.oidcAuthority = "https://auth.las2peer.org/auth";
     this.kcRealm = "main";
     this.oidcClientId = "";
     this.service = "Unnamed Service";
