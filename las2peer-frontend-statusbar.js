@@ -2,7 +2,7 @@ import {html, css, LitElement} from "lit";
 import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
 import "@polymer/iron-dropdown/iron-dropdown.js";
-import "keycloak-js/dist/keycloak.js";
+import {default as Keycloak} from "keycloak-js/dist/keycloak.js";
 
 export class Las2peerFrontendStatusbar extends LitElement {
 
@@ -233,7 +233,7 @@ export class Las2peerFrontendStatusbar extends LitElement {
       },
       loggedIn: {
         type: Boolean,
-      }
+      },
     };
   }
 
