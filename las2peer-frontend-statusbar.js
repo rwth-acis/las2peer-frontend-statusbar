@@ -22,7 +22,12 @@ export class Las2peerFrontendStatusbar extends LitElement {
       }
       #widget-container:hover {
         background: #5691f5;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border: solid;
+        border-radius: 5px;
       }
+
       .inline {
         display: inline-block;
       }
@@ -53,79 +58,86 @@ export class Las2peerFrontendStatusbar extends LitElement {
         display: inline-block;
         width: 100%;
       }
-      
+
       button {
-          border: 0px;
+        border: 0px;
       }
       button:focus {
-          outline: none;
+        outline: none;
       }
       #circular {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
-          -webkit-border-radius: 20px;
-          -moz-border-radius: 20px;
-          box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-          -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
-          -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
       }
       .dropdown-content {
-          background-color: white;
-          line-height: 20px;
-          border-radius: 1px;
-          box-shadow: 0px 1px 1px #ccc;
-          outline: none;
-          margin-top: 42px;
-          z-index: 5000;
+        background-color: white;
+        line-height: 20px;
+        border-radius: 1px;
+        box-shadow: 0px 1px 1px #ccc;
+        outline: none;
+        margin-top: 42px;
+        z-index: 5000;
       }
-      #dropdown-button {           
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
-          -webkit-border-radius: 20px;
-          -moz-border-radius: 20px;
-          background-image: url('https://raw.githubusercontent.com/rwth-acis/las2peer-frontend-user-widget/master/learning-layers.svg');
-          background-size: 100% 100%;
-          background-color: var(--user-widget-button-background, rgba(0, 0, 0, 0));
-          box-shadow: 0 0 6px rgba(0, 0, 0, .6);
-          -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .6);
-          -moz-box-shadow: 0 0 6px rgba(0, 0, 0, .6);
-          position: relative;
-          border: 1px solid white;
+      #dropdown-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        background-image: url("https://raw.githubusercontent.com/rwth-acis/las2peer-frontend-user-widget/master/learning-layers.svg");
+        background-size: 100% 100%;
+        background-color: var(
+          --user-widget-button-background,
+          rgba(0, 0, 0, 0)
+        );
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        position: relative;
+        border: 1px solid white;
       }
       #dropdown-button:hover {
-          cursor: pointer;
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
-          -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, .9);
-          -moz-box-shadow: 0 0 12px rgba(0, 0, 0, .9);
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
       }
       a {
-          display: block;
-          position: relative;
-          padding: 1em;
-          text-decoration: none;
+        display: block;
+        position: relative;
+        padding: 1em;
+        text-decoration: none;
       }
       ul {
-          margin: 0;
-          padding: 0;
+        margin: 0;
+        padding: 0;
       }
       li {
-          display: block;
-          position: relative;
-          margin: 0;
-          padding: 0;
+        display: block;
+        position: relative;
+        margin: 0;
+        padding: 0;
       }
       li:not(:last-of-type) {
-          border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #eee;
       }
       a {
-          color: #337ab7;
-          text-decoration: none;
+        color: #337ab7;
+        text-decoration: none;
       }
-      a:hover, a:focus{
+      a:hover,
+      a:focus {
         color: #23527c;
-          text-decoration: none;
+        text-decoration: none;
+      }
+      #username {
+        margin-left: 4px;
       }
     `;
   }
