@@ -1,6 +1,6 @@
 # \<las2peer-frontend-statusbar\>
 
-A polymer widget unifying the [las2peer-frontend-user-widget](https://github.com/rwth-acis/las2peer-frontend-user-widget) with the [openid connect signin button](https://github.com/rwth-acis/openidconnect-signin)
+A Lit based HTML element, that contains login functionality and enables interaction with the [las2peer-contact-service](https://github.com/rwth-acis/las2peer-contact-service) and the [las2peer-user-information-service](https://github.com/rwth-acis/las2peer-user-information-service).
 
 ## Deploy
 
@@ -16,20 +16,27 @@ import 'las2peer-frontend-statusbar/las2peer-frontend-statusbar.js'
 ```
 <las2peer-frontend-statusbar></las2peer-frontend-statusbar>
 ```
+4. (optional) Copy the [/callbacks/silent-check-sso.html](./callbacks/silent-check-sso.html) file to your project
 
-### Integrating User-Widget Functionality
-In order to properly integrate the functionality of the user widget you need to specify a `baseurl` attribute e.g., `http://localhost:8080`.
-Because the user widget accesses the [las2peer-userinformation-service](https://github.com/rwth-acis/las2peer-UserInformation-Service), the [las2peer-contact-service](https://github.com/rwth-acis/las2peer-Contact-Service), as well as the [las2peer-file-service](https://github.com/rwth-acis/las2peer-FileService) the webconnector of these services should all be accessible at this address.
+### Enabling contact- and user-information-service Functionality
+In order to properly interact with the contact- and user-information-service, you need to specify a `baseUrl` attribute e.g., `http://localhost:8080`. It has to be set to the URL at which the webconnectors of the services are accessible.
 
 ### Integrating OpenID Connect Functionality
-The sign in procedure is implemented by the openid connect signin button which needs to be provided with a **clientID**, **authority**, and a **redirectURI** which can be set using the `oidcclientid`, `oidcauthority`, and `oidcreturnurl` attributes respectively. The `oidcauthority` defaults to learning layers if non is specified (for an example please refer to the demo source code).
-The `oidcreturnurl` needs to match with one of the redirection URI(s) associated with the specified `oidcclientid`. Additionally make sure to set the *Grant Types* to *implicit* and the *Response Types* to *token*, as well as include *openid, email, and profile* in the scope.
-You can create a new openID connect token [here](https://api.learning-layers.eu/o/oauth2/) using the learning-layers API. In order for the redirects to work properly make sure to not change the path of any of the files contained within the `callbacks` directory.
+The sign in procedure is implemented using [keycloak-js](https://www.npmjs.com/package/keycloak-js) which needs to be linked with our Keycloak instance. In most cases, you only have to set the `oidcClientId` attribute to the ClientID of your 
+OIDC client. You can create your own client at the [account console](https://auth.las2peer.org/auth/realms/main/account/#/userClients). If you need to use a different Keycloak instance or want to connect the statusbar to a different Keycloak
+Realm, you have to sett the attributes `oidcAuthority` and `kcRealm` to the domain of your Keycloak instance and the Keycloak Realm. For a simple example, have a look at the [index.html](./index.html) file.
+
+To enable a silent check if the user is already logged in, you can copy the [/callbacks](./callbacks) directory to your project, which contains an HTML file that is opened in an iframe during the check. Note that this "silent check-sso" functionality
+is implemented in keycloak-js and has some limitations. Some browsers block this feature due to the use of third-party cookies. In this case, the page is reloaded after the check. More information about this problem [here](https://www.keycloak.org/docs/latest/securing_apps/#_modern_browsers). 
+
+### Communication with the las2peer-frontend-statusbar
+To get user information after the login, the statusbar sends a `signed-in` event, which contains the userinformation in its details.
+It is also possible to interact with the statusbar by sending out the events `sign-in` and `sign-out` to trigger a login or logout.
 
 ## Demo
 
 The project includes a demo which can be run locally by running `npm i` and `polymer serve`.
-In order to run the demo you should have version 3.0 of [polymer-cli](https://polymer-library.polymer-project.org/3.0/docs/tools/polymer-cli) installed. Also make sure to access the demo via the following URL `localhost:8081`.
+In order to run the demo you should have version 3.0 of [polymer-cli](https://polymer-library.polymer-project.org/3.0/docs/tools/polymer-cli) installed.
 
 ## Slots
 
