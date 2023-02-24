@@ -278,6 +278,11 @@ export class Las2peerFrontendStatusbar extends LitElement {
 
   _handleLogout() {
     this.keycloak.logout();
+    let event = new CustomEvent("signed-out", {
+      bubbles: true,
+      detail: { message: "signed-out" },
+    });
+    this.dispatchEvent(event);
   }
 
   firstUpdated(_changedProperties) {
