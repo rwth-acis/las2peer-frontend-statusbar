@@ -2,10 +2,9 @@ import {html, css, LitElement} from "lit";
 import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
 import "@polymer/iron-dropdown/iron-dropdown.js";
-import {default as Keycloak} from "keycloak-js/dist/keycloak.js";
+import "keycloak-js/dist/keycloak.js";
 
 export class Las2peerFrontendStatusbar extends LitElement {
-
   static get styles() {
     return css`
       :host([background]) {
@@ -161,36 +160,61 @@ export class Las2peerFrontendStatusbar extends LitElement {
             id="widget-container"
             @click="${this.handleClick}"
           >
-          <button class="dropdown-trigger" id="dropdown-button">
-            <iron-dropdown id="dropdown">
-              <div class="dropdown-content" slot="dropdown-content">
-                <ul tabindex="0">
-                  <li><a href="javascript:void(0)" @click="${this._editProfile}">Edit profile</a>
-                  </li>
-                  <li><a href="javascript:void(0)" @click="${this._editRights}">Change privacy</a>
-                  </li>
-                  <li><a href="javascript:void(0)" @click="${this._editContacts}">Manage Contacts</a>
-                  </li>
-                  <li><a href="javascript:void(0)" @click="${this._editGroups}">Manage Groups</a>
-                  </li>
-                  <li><a href="javascript:void(0)" @click="${this._addressbook}">Addressbook</a>
-                  </li>
-                  <li><a href="javascript:void(0)" @click="${this._handleLogout}">Logout</a>
-                  </li>
-                </ul>
-              </div>
-            </iron-dropdown>
-            <las2peer-user-widget
-              id="widget"
-              baseurl=${this.baseUrl}
-              loginname=${this.loginName}
-              loginpassword=${this.loginPassword}
-              oidcaccesstoken=${this.oidcAccessToken}
-              oidcissuerurl=${this.oidcIssuerUrl}
-              oidcusersub=${this.oidcUserSub}
-              suppresserrortoast=${this.suppressWidgetError}
-            ></las2peer-user-widget></button>
-            <h3 id="username">${this.loginName ===  "" ? "SSO Login" : this.loginName}</h3>
+            <button class="dropdown-trigger" id="dropdown-button">
+              <iron-dropdown id="dropdown">
+                <div class="dropdown-content" slot="dropdown-content">
+                  <ul tabindex="0">
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editProfile}"
+                        >Edit profile</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editRights}"
+                        >Change privacy</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:void(0)"
+                        @click="${this._editContacts}"
+                        >Manage Contacts</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editGroups}"
+                        >Manage Groups</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._addressbook}"
+                        >Addressbook</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:void(0)"
+                        @click="${this._handleLogout}"
+                        >Logout</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </iron-dropdown>
+              <las2peer-user-widget
+                id="widget"
+                baseurl=${this.baseUrl}
+                loginname=${this.loginName}
+                loginpassword=${this.loginPassword}
+                oidcaccesstoken=${this.oidcAccessToken}
+                oidcissuerurl=${this.oidcIssuerUrl}
+                oidcusersub=${this.oidcUserSub}
+                suppresserrortoast=${this.suppressWidgetError}
+              ></las2peer-user-widget>
+            </button>
+            <h3 id="username">
+              ${this.loginName === "" ? "SSO Login" : this.loginName}
+            </h3>
           </div>
         </div>
       </paper-card>
@@ -293,23 +317,30 @@ export class Las2peerFrontendStatusbar extends LitElement {
       clientId: this.oidcClientId,
     });
     if (!this.loggedIn) {
-      this.keycloak.init({
-        onLoad: "check-sso",
-        silentCheckSsoRedirectUri: window.location.origin + '/callbacks/silent-check-sso.html',
-      }).then((authenticated) => {
-        if (authenticated) {
-          this.oidcAccessToken = this.keycloak.token;
-          let idToken = this.keycloak.idTokenParsed;
-          this.loginName = idToken.preferred_username;
-          this.oidcUserSub = idToken.sub;
-          this.oidcIssuerUrl = this.keycloak.authServerUrl + "/realms/" + this.kcRealm;
-          this.loggedIn = true;
-          let event = new CustomEvent("signed-in", {bubbles: true, detail: {profile: idToken}});
-          this.dispatchEvent(event);
-        } else {
-          console.log("not authenticated");
-        }
-      });
+      this.keycloak
+        .init({
+          onLoad: "check-sso",
+          silentCheckSsoRedirectUri:
+            window.location.origin + "/callbacks/silent-check-sso.html",
+        })
+        .then((authenticated) => {
+          if (authenticated) {
+            this.oidcAccessToken = this.keycloak.token;
+            let idToken = this.keycloak.idTokenParsed;
+            this.loginName = idToken.preferred_username;
+            this.oidcUserSub = idToken.sub;
+            this.oidcIssuerUrl =
+              this.keycloak.authServerUrl + "/realms/" + this.kcRealm;
+            this.loggedIn = true;
+            let event = new CustomEvent("signed-in", {
+              bubbles: true,
+              detail: { profile: idToken, access_token: this.oidcAccessToken },
+            });
+            this.dispatchEvent(event);
+          } else {
+            console.log("not authenticated");
+          }
+        });
     }
   }
 
@@ -340,7 +371,6 @@ export class Las2peerFrontendStatusbar extends LitElement {
   _addressbook() {
     this.shadowRoot.getElementById("widget").setAttribute("pageId", "5");
   }
-
 }
 
 customElements.define("las2peer-frontend-statusbar", Las2peerFrontendStatusbar);
