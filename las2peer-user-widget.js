@@ -245,14 +245,23 @@ class Las2peerUserWidget extends LitElement {
     update(_changedProperties) {
         if (_changedProperties.has("loginName") || _changedProperties.has("loginPassword") ||
             _changedProperties.has("oidcAccessToken") || _changedProperties.has("oidcUserSub")) {
-            this.loggedIn = (this.loginName != null && this.loginName.length && this.oidcAccessToken != null &&
-                this.oidcAccessToken.length && this.oidcUserSub != null && this.oidcUserSub.length);
-            if (this.loggedIn) {
-                this._requestHeaders = this._computeHeaders(this.loginName, this.loginPassword, this.oidcAccessToken,
-                    this.oidcIssuerUrl, this.oidcUserSub);
+              this.loggedIn =
+                this.loginName != null &&
+                this.loginName.length &&
+                this.oidcAccessToken != null &&
+                this.oidcAccessToken.length &&
+                this.oidcUserSub != null &&
+                this.oidcUserSub.length;
+              if (this.loggedIn) {
+                this._requestHeaders = this._computeHeaders(
+                  this.loginName,
+                  this.loginPassword,
+                  this.oidcAccessToken,
+                  this.oidcIssuerUrl,
+                  this.oidcUserSub
+                );
+              }
             }
-        }
-        console.log(_changedProperties);
         super.update(_changedProperties);
     }
 
