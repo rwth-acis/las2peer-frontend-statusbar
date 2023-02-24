@@ -1,62 +1,148 @@
-import { html, LitElement } from "lit-element";
-import "openidconnect-signin/openidconnect-signin.js";
-import "openidconnect-signin/openidconnect-popup-signin-callback.js";
-import "openidconnect-signin/openidconnect-popup-signout-callback.js";
-import "openidconnect-signin/openidconnect-signin-silent-callback.js";
-import "las2peer-frontend-user-widget/las2peer-user-widget.js";
+import {html, css, LitElement} from "lit";
+import "./las2peer-user-widget.js";
 import "@polymer/paper-card/paper-card.js";
+import "@polymer/iron-dropdown/iron-dropdown.js";
+import "keycloak-js/dist/keycloak.js";
 
-class Las2peerFrontendStatusbar extends LitElement {
+export class Las2peerFrontendStatusbar extends LitElement {
+  static get styles() {
+    return css`
+      :host([background]) {
+        background: var(--statusbar-background, #fff);
+        display: block;
+      }
+      paper-card {
+        --paper-card-background-color: var(--statusbar-background, #fff);
+      }
+      #widget-container {
+        cursor: pointer;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      #widget-container:hover {
+        background: #5691f5;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border: solid;
+        border-radius: 5px;
+      }
+
+      .inline {
+        display: inline-block;
+      }
+      .inline + .inline {
+        margin-left: 5px;
+      }
+      .flex {
+        display: flex;
+      }
+      .align-vertical {
+        align-items: center;
+      }
+      .center-vertical {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+      #innercontainer {
+        display: flex;
+      }
+      .last {
+        margin-left: auto;
+        margin-right: 25px;
+      }
+      .first {
+        margin-left: 25px;
+      }
+      #statusbar-container {
+        display: inline-block;
+        width: 100%;
+      }
+
+      button {
+        border: 0px;
+      }
+      button:focus {
+        outline: none;
+      }
+      #circular {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+      }
+      .dropdown-content {
+        background-color: white;
+        line-height: 20px;
+        border-radius: 1px;
+        box-shadow: 0px 1px 1px #ccc;
+        outline: none;
+        margin-top: 42px;
+        z-index: 5000;
+      }
+      #dropdown-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        background-image: url("https://raw.githubusercontent.com/rwth-acis/las2peer-frontend-user-widget/master/learning-layers.svg");
+        background-size: 100% 100%;
+        background-color: var(
+          --user-widget-button-background,
+          rgba(0, 0, 0, 0)
+        );
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+        position: relative;
+        border: 1px solid white;
+      }
+      #dropdown-button:hover {
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+      }
+      a {
+        display: block;
+        position: relative;
+        padding: 1em;
+        text-decoration: none;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        display: block;
+        position: relative;
+        margin: 0;
+        padding: 0;
+      }
+      li:not(:last-of-type) {
+        border-bottom: 1px solid #eee;
+      }
+      a {
+        color: #337ab7;
+        text-decoration: none;
+      }
+      a:hover,
+      a:focus {
+        color: #23527c;
+        text-decoration: none;
+      }
+      #username {
+        margin-left: 4px;
+      }
+    `;
+  }
+
   render() {
     return html`
-      <style>
-        :host([background]) {
-          background: var(--statusbar-background, #fff);
-          display: block;
-        }
-        paper-card {
-          --paper-card-background-color: var(--statusbar-background, #fff);
-        }
-
-        #widget-container {
-          cursor: pointer;
-          padding-left: 10px;
-          padding-right: 10px;
-        }
-        #widget-container:hover {
-          background: #5691f5;
-        }
-        .inline {
-          display: inline-block;
-        }
-        .inline + .inline {
-          margin-left: 5px;
-        }
-        .flex {
-          display: flex;
-        }
-        .align-vertical {
-          align-items: center;
-        }
-        .center-vertical {
-          margin-top: auto;
-          margin-bottom: auto;
-        }
-        #innercontainer {
-          display: flex;
-        }
-        .last {
-          margin-left: auto;
-          margin-right: 25px;
-        }
-        .first {
-          margin-left: 25px;
-        }
-        #statusbar-container {
-          display: inline-block;
-          width: ${this.displayWidth};
-        }
-      </style>
       <paper-card id="statusbar-container">
         <div id="innercontainer">
           <slot class="inline center-vertical first" name="left"></slot>
@@ -72,63 +158,88 @@ class Las2peerFrontendStatusbar extends LitElement {
           <div
             class="flex align-vertical last"
             id="widget-container"
-            @click=${this.handleClick}
-            @signed-in="${this.handleLogin}"
-            @signed-out="${this.handleLogout}"
+            @click="${this.handleClick}"
           >
-            <las2peer-user-widget
-              id="widget"
-              base-url=${this.baseUrl}
-              login-name=${this.loginName}
-              login-password=${this.loginPassword}
-              login-oidc-token=${this.loginOidcToken}
-              login-oidc-provider=${this.loginOidcProvider}
-              login-oidc-sub=${this.loginOidcSub}
-              suppress-error-toast=${this.suppressWidgetError}
-            ></las2peer-user-widget>
-            <h3 id="username">${this._getUsername()}</h3>
+            <button class="dropdown-trigger" id="dropdown-button">
+              <iron-dropdown id="dropdown">
+                <div class="dropdown-content" slot="dropdown-content">
+                  <ul tabindex="0">
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editProfile}"
+                        >Edit profile</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editRights}"
+                        >Change privacy</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:void(0)"
+                        @click="${this._editContacts}"
+                        >Manage Contacts</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._editGroups}"
+                        >Manage Groups</a
+                      >
+                    </li>
+                    <li>
+                      <a href="javascript:void(0)" @click="${this._addressbook}"
+                        >Addressbook</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href="javascript:void(0)"
+                        @click="${this._handleLogout}"
+                        >Logout</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </iron-dropdown>
+              <las2peer-user-widget
+                id="widget"
+                baseurl=${this.baseUrl}
+                loginname=${this.loginName}
+                loginpassword=${this.loginPassword}
+                oidcaccesstoken=${this.oidcAccessToken}
+                oidcissuerurl=${this.oidcIssuerUrl}
+                oidcusersub=${this.oidcUserSub}
+                suppresserrortoast=${this.suppressWidgetError}
+              ></las2peer-user-widget>
+            </button>
+            <h3 id="username">
+              ${this.loginName === "" ? "SSO Login" : this.loginName}
+            </h3>
           </div>
         </div>
       </paper-card>
-      <openidconnect-signin
-        id="oidcButton"
-        style="display:none"
-        @signed-in="${this.handleLogin}"
-        @signed-out="${this.handleLogout}"
-        scope="openid profile email"
-        clientid="${this.oidcClientId}"
-        authority="${this.oidcAuthority}"
-        providername="Layers"
-        popupredirecturi="${this.oidcPopupSigninUrl}"
-        popuppostlogoutredirecturi="${this.oidcPopupSignoutUrl}"
-        silentredirecturi="${this.oidcSilentSigninUrl}"
-        ?useRedirect="${this.useRedirect}"
-      ></openidconnect-signin>
     `;
   }
 
   static get properties() {
     return {
-      service: {
+      // keycloak stuff
+      oidcClientId: {
         type: String,
       },
-      subtitle: {
+      oidcAuthority: {
         type: String,
       },
+      kcRealm: {
+        type: String,
+      },
+      keycloak: {
+        type: Keycloak,
+      },
+
+      // user widget stuff
       baseUrl: {
         type: String,
-      },
-      oidcPopupSigninUrl: {
-        type: String,
-      },
-      oidcPopupSignoutUrl: {
-        type: String,
-      },
-      oidcSilentSigninUrl: {
-        type: String,
-      },
-      loggedIn: {
-        type: Boolean,
       },
       loginName: {
         type: String,
@@ -136,37 +247,27 @@ class Las2peerFrontendStatusbar extends LitElement {
       loginPassword: {
         type: String,
       },
-      loginOidcToken: {
+      oidcAccessToken: {
         type: String,
       },
-      loginOidcProvider: {
+      oidcIssuerUrl: {
         type: String,
       },
-      loginOidcSub: {
-        type: String,
-      },
-      sendCookie: {
-        type: Boolean,
-      },
-      autoAppendWidget: {
-        type: Boolean,
-      },
-      _oidcUser: {
-        type: Object,
-      },
-      oidcClientId: {
-        type: String,
-      },
-      oidcAuthority: {
-        type: String,
-      },
-      useRedirect: {
-        type: Boolean,
-      },
-      displayWidth: {
+      oidcUserSub: {
         type: String,
       },
       suppressWidgetError: {
+        type: Boolean,
+      },
+
+      // other stuff
+      service: {
+        type: String,
+      },
+      subtitle: {
+        type: String,
+      },
+      loggedIn: {
         type: Boolean,
       },
     };
@@ -174,108 +275,101 @@ class Las2peerFrontendStatusbar extends LitElement {
 
   constructor() {
     super();
-    this._initialize();
-    this.autoAppendWidget = false;
-    this.service = "Unnamed Service";
-    this.subtitle = "";
-    this.baseUrl = "http://127.0.0.1:8080";
-    this.oidcAuthority = "https://auth.las2peer.org/auth/realms/main";
-    this.displayWidth = "100%";
-    this.oidcPopupSigninUrl =
-      "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signin-callback.html";
-    this.oidcPopupSignoutUrl =
-      "/node_modules/las2peer-frontend-statusbar/callbacks/popup-signout-callback.html";
-    this.oidcSilentSigninUrl =
-      "/node_modules/las2peer-frontend-statusbar/callbacks/silent-callback.html";
-    this.useRedirect = false;
-    this.suppressWidgetError = false;
-  }
-
-  handleClick(e) {
-    if (!this.loggedIn)
-      this.shadowRoot.querySelector("#oidcButton")._handleClick();
-  }
-
-  handleLogin(event) {
-    if (this.loggedIn) return;
-    let userObject = event.detail;
-    this.dispatchEvent(
-      new CustomEvent("signed-in", { detail: userObject, bubbles: true })
-    );
-    this.loggedIn = true;
-    this.shadowRoot.querySelector("#widget-container").style = "cursor:auto";
-    if (!userObject) {
-      this.shadowRoot.querySelector("#username").innerHTML =
-        this._getUsername();
-    } else {
-      if (userObject.token_type !== "Bearer")
-        throw "unexpected OIDC token type, fix me";
-      this._oidcUser = userObject;
-      this.loginOidcToken = this._oidcUser.access_token;
-      this.loginOidcProvider = this.oidcAuthority;
-      this.loginOidcSub = this._oidcUser.profile.sub;
-      if (this.autoAppendWidget) this._appendWidget();
-    }
-  }
-
-  handleLogout() {
-    if (!this.loggedIn) return;
-    this.shadowRoot.querySelector("#oidcButton")._handleClick();
-    this.dispatchEvent(new CustomEvent("signed-out"));
-    console.log("logged out ", this._getUsername());
-    this._initialize();
-    if (this.autoAppendWidget) this._appendWidget();
-    this.shadowRoot.querySelector("#widget-container").style = "cursor:default";
-  }
-
-  _appendWidget() {
-    let widgetHTML =
-      "<las2peer-user-widget id='widget' base-url=" + this.baseUrl;
-    if (!!this.loginName) widgetHTML += " login-name=" + this.loginName;
-    if (!!this.loginPassword)
-      widgetHTML += " login-password=" + this.loginPassword;
-    if (!!this.loginOidcToken) {
-      widgetHTML += " login-oidc-token=" + this.loginOidcToken;
-      if (!this.loginName && !!this._oidcUser)
-        widgetHTML +=
-          " login-name=" + this._oidcUser.profile.preferred_username;
-    }
-    if (!!this.loginOidcProvider)
-      widgetHTML += " login-oidc-provider=" + this.loginOidcProvider;
-    if (!!this.loginOidcSub)
-      widgetHTML += " login-oidc-sub=" + this.loginOidcSub;
-    if (!!this.sendCookie) widgetHTML += " send-cookie=true";
-    if (!!this.suppressWidgetError) widgetHTML += " suppress-error-toast=true";
-    widgetHTML += "></las2peer-user-widget>";
-    let headerHTML = "<h3>" + this._getUsername() + "</h3>";
-    this.shadowRoot.querySelector("#widget-container").innerHTML =
-      widgetHTML + headerHTML;
-  }
-
-  _initialize() {
     this.loggedIn = false;
     this.loginName = "";
     this.loginPassword = "";
-    this.loginOidcToken = "";
-    this.loginOidcProvider = "";
-    this.loginOidcSub = "";
-    this._oidcUser = null;
-    this.sendCookie = false;
+    this.oidcAccessToken = "";
+    this.oidcIssuerUrl = "";
+    this.oidcUserSub = "";
     this.suppressWidgetError = false;
+    this.oidcAuthority = "https://auth.las2peer.org/auth";
+    this.kcRealm = "main";
+    this.oidcClientId = "";
+    this.service = "Unnamed Service";
+    this.subtitle = "";
+    this.baseUrl = "http://127.0.0.1:8080";
+
+    window.addEventListener("sign-in", this._handleLogin);
+    window.addEventListener("signed-out", this._handleLogout);
   }
 
-  _getUsername() {
-    if (!this.loggedIn) return "SSO Login";
-    if (!!this.loginName) return this.loginName;
-    let widget = this.shadowRoot.querySelector("#widget");
-    let fullName = "";
-    if (!!widget.firstName) {
-      fullName += widget.firstName;
-      if (!!widget.lastName) fullName += " " + widget.lastName;
-      return fullName;
+  /**
+   * not needed at the moment. But it can be used to handle logins triggered by an event
+   */
+  _handleLogin() {
+    this.keycloak.login();
+  }
+
+  _handleLogout() {
+    this.keycloak.logout();
+    let event = new CustomEvent("signed-out", {
+      bubbles: true,
+      detail: { message: "signed-out" },
+    });
+    this.dispatchEvent(event);
+  }
+
+  firstUpdated(_changedProperties) {
+    super.firstUpdated(_changedProperties);
+    this.keycloak = new Keycloak({
+      url: this.oidcAuthority,
+      realm: this.kcRealm,
+      clientId: this.oidcClientId,
+    });
+    if (!this.loggedIn) {
+      this.keycloak
+        .init({
+          onLoad: "check-sso",
+          silentCheckSsoRedirectUri:
+            window.location.origin + "/callbacks/silent-check-sso.html",
+        })
+        .then((authenticated) => {
+          if (authenticated) {
+            this.oidcAccessToken = this.keycloak.token;
+            let idToken = this.keycloak.idTokenParsed;
+            this.loginName = idToken.preferred_username;
+            this.oidcUserSub = idToken.sub;
+            this.oidcIssuerUrl =
+              this.keycloak.authServerUrl + "/realms/" + this.kcRealm;
+            this.loggedIn = true;
+            let event = new CustomEvent("signed-in", {
+              bubbles: true,
+              detail: { profile: idToken, access_token: this.oidcAccessToken },
+            });
+            this.dispatchEvent(event);
+          } else {
+            console.log("not authenticated");
+          }
+        });
     }
-    if (!!this._oidcUser) return this._oidcUser.profile.preferred_username;
-    return "Unknown Username";
+  }
+
+  handleClick() {
+    if (!this.loggedIn) {
+      this.keycloak.login();
+    } else {
+      this.shadowRoot.getElementById("dropdown").open();
+    }
+  }
+
+  _editProfile() {
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "1");
+  }
+
+  _editRights() {
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "2");
+  }
+
+  _editContacts() {
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "3");
+  }
+
+  _editGroups() {
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "4");
+  }
+
+  _addressbook() {
+    this.shadowRoot.getElementById("widget").setAttribute("pageId", "5");
   }
 }
 
